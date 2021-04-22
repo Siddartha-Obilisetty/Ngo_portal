@@ -20,6 +20,7 @@ public class AdminServiceImpl implements AdminService
 	AdminDao admin;
 
 	//not finished
+	@Transactional
 	@Override
 	public boolean approveDonation(DonationDistribution distribution) {
 		// TODO Auto-generated method stub
@@ -44,6 +45,7 @@ public class AdminServiceImpl implements AdminService
 		}
 	}
 
+	@Transactional
 	@Override
 	public Employee modifyEmployee(Employee employee) throws NoSuchEmployeeException {
 		Employee e=null;
@@ -62,6 +64,7 @@ public class AdminServiceImpl implements AdminService
 		}
 	}
 
+	@Transactional
 	@Override
 	public boolean removeEmployee(int employeeId) throws NoSuchEmployeeException {
 		try{
@@ -79,6 +82,7 @@ public class AdminServiceImpl implements AdminService
 		}
 	}
 
+	@Transactional(readOnly = true)
 	@Override
 	public Employee findEmployeeById(int employeeId) throws NoSuchEmployeeException {
 		Employee e=null;
@@ -98,6 +102,7 @@ public class AdminServiceImpl implements AdminService
 		}
 	}
 
+	@Transactional(readOnly = true)
 	@Override
 	public List<Employee> findEmployeeByName(String name) throws NoSuchEmployeeException {
 		List<Employee> eList=null;
@@ -116,17 +121,16 @@ public class AdminServiceImpl implements AdminService
 		}
 	}
 
+	@Transactional(readOnly = true)
 	@Override
 	public List<Employee> findAllEmployee() {
-		List<Employee> eList=null;
 		try{
-			eList = admin.readAllEmployees();
+			return admin.readAllEmployees();
 		}
 		catch(SQLException ex) {
 			System.out.println(ex.getMessage());
 			return null;
 		}
-		return eList;
 	}
 
 }

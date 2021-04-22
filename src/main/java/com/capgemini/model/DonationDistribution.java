@@ -4,6 +4,8 @@ import java.util.Date;
 
 import javax.persistence.*;
 
+import org.hibernate.annotations.Type;
+
 @Entity
 public class DonationDistribution 
 {
@@ -19,16 +21,23 @@ public class DonationDistribution
 	@Column(name="app_or_rej_date")
 	private Date approvalOrRejectedDate;
 	
-	@Column(name="status")
+	@Enumerated(EnumType.STRING)
+	@Type(type = "com.capgemini.model.DonationDistributionStatus")
 	private DonationDistributionStatus status;
 	
-	@Column(name="needy_people_name")
+
+	@OneToOne
+	@JoinColumn(name = "np_id")
 	private NeedyPeople needyPeople;
 	
-	@Column(name="donation_item")
+
+	@OneToOne
+	@JoinColumn(name = "item_id")
 	private DonationItem donationItem;
 	
-	@Column(name="Employee_assg")
+
+	@OneToOne
+	@JoinColumn(name = "employee_id")
 	private Employee employee;
 		
 	public DonationDistribution() {}
@@ -70,6 +79,30 @@ public class DonationDistribution
 	}
 	public void setStatus(DonationDistributionStatus status) {
 		this.status = status;
+	}
+
+	public NeedyPeople getNeedyPeople() {
+		return needyPeople;
+	}
+
+	public void setNeedyPeople(NeedyPeople needyPeople) {
+		this.needyPeople = needyPeople;
+	}
+
+	public DonationItem getDonationItem() {
+		return donationItem;
+	}
+
+	public void setDonationItem(DonationItem donationItem) {
+		this.donationItem = donationItem;
+	}
+
+	public Employee getEmployee() {
+		return employee;
+	}
+
+	public void setEmployee(Employee employee) {
+		this.employee = employee;
 	}
 	
 }

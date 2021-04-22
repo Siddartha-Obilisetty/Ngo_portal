@@ -30,15 +30,13 @@ public class Employee
 	
 	public Employee() {}
 	
-	public Employee(int employeeId, String employeeName, String email, String phone, String username, String password,
-			Address address) {
+	public Employee(int employeeId, String employeeName, String email, String phone, String username, String password) {
 		this.employeeId = employeeId;
 		this.employeeName = employeeName;
 		this.email = email;
 		this.phone = phone;
 		this.username = username;
 		this.password = password;
-		this.address = address;
 	}
 	public int getEmployeeId() {
 		return employeeId;

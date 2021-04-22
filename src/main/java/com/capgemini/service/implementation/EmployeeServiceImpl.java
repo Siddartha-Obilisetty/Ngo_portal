@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.capgemini.dao.EmployeeDao;
 import com.capgemini.exception.DuplicateNeedyPeopleException;
@@ -22,17 +23,20 @@ public class EmployeeServiceImpl implements EmployeeService
 	EmployeeDao employee;
 
 	//not finished
+	@Transactional
 	@Override
 	public String helpNeedyPerson(DonationDistribution distribute) {
 		return null;
 	}
 	//not finished
+	@Transactional
 	@Override
 	public boolean login(Employee employee) throws NoSuchEmployeeException {
 		// TODO Auto-generated method stub
 		return false;
 	}
 
+	@Transactional
 	@Override
 	public boolean addNeedyPerson(NeedyPeople person) throws DuplicateNeedyPeopleException {
 		NeedyPeople np = employee.readNeedyPeopleById(person.getNeedyPersonid());
@@ -44,18 +48,20 @@ public class EmployeeServiceImpl implements EmployeeService
 		}
 		
 	}
-
+	
+	@Transactional
 	@Override
 	public boolean removeNeedyPerson(NeedyPeople person) throws NoSuchNeedyPeopleException {
 		NeedyPeople np = employee.readNeedyPeopleById(person.getNeedyPersonid());
 		if(np!=null) {
-			return employee.deleteNeedyPerson(person);
+			return employee.deleteNeedyPerson(person.getNeedyPersonid());
 		}
 		else {
 			throw new NoSuchNeedyPeopleException(person.getNeedyPersonid());
 		}
 	}
 
+	@Transactional(readOnly = true)
 	@Override
 	public NeedyPeople findNeedyPeopleById(int id) throws NoSuchNeedyPeopleException {
 		NeedyPeople np = employee.readNeedyPeopleById(id);
@@ -66,7 +72,8 @@ public class EmployeeServiceImpl implements EmployeeService
 			throw new NoSuchNeedyPeopleException(id);
 		}
 	}
-
+	
+	@Transactional(readOnly = true)
 	@Override
 	public List<NeedyPeople> findNeedyPeopleByName(String name) throws NoSuchNeedyPeopleException {
 		List<NeedyPeople> np = employee.readNeedyPeopleByName(name);
@@ -78,6 +85,7 @@ public class EmployeeServiceImpl implements EmployeeService
 		}
 	}
 
+	@Transactional(readOnly = true)
 	@Override
 	public List<NeedyPeople> findAllNeedyPeople() {
 		return employee.readAllNeedyPeople();

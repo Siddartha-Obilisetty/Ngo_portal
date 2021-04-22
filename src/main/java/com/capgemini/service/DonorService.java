@@ -12,8 +12,6 @@ public interface DonorService
 	public void sendThankyouMailToDonator(Donor donor);
 	public String forgotPassword(String username);
 	public String resetPassword(String username, String oldPassword, String newPassword);
-	public void emailPasswordToDonor(String email);
+	public void emailPasswordToDonor(String email,String password);
 	
-	
-
 }

@@ -3,22 +3,27 @@ package com.capgemini.model;
 import java.util.Date;
 import javax.persistence.*;
 
+import org.hibernate.annotations.Type;
+
 @Entity
 public class Donation 
 {
 	@Id
 	@Column(name="donation_id")
 	private int donationId;
-	
-	private DonationItem item;
-	
+		
 	@Column(name="donation_amount")
 	private double donationAmount;
 	
 	@Column(name="donation_date")
 	private Date donationDate;
 	
-	@ManyToOne
+
+	@OneToOne
+	@JoinColumn(name = "item_id")
+	private DonationItem item;
+	
+	@OneToOne
 	@JoinColumn(name = "donor_id")
 	private Donor donor;
 	

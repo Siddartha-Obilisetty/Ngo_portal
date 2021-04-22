@@ -2,6 +2,8 @@ package com.capgemini.model;
 
 import javax.persistence.*;
 
+import org.hibernate.annotations.Type;
+
 @Entity
 public class DonationItem 
 {
@@ -12,7 +14,8 @@ public class DonationItem
 	@Column(name="item_desc")
 	private String itemDescription;
 	
-	@Column(name = "donation_type")
+	@Enumerated(EnumType.STRING)
+	@Type(type = "com.capgemini.model.DonationType")
 	private DonationType donationType;
 	
 	public DonationItem() {}

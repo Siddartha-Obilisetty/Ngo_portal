@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.capgemini.dao.DonorDao;
 import com.capgemini.exception.DuplicateDonorException;
@@ -20,28 +21,28 @@ public class DonorServiceImpl implements DonorService
 	DonorDao donorDao;
 
 	//doubt
-
+	@Transactional
 	@Override
 	public void sendThankyouMailToDonator(Donor donor) {
 		System.out.println("Thank you mail sent");
 	}
 	
 	//doubt
-
+	@Transactional
 	@Override
 	public String forgotPassword(String username) {
 		Donor d=donorDao.findDonorByDonorUsername(username);
-		emailPasswordToDonor(d.getDonorEmail());
+		emailPasswordToDonor(d.getDonorEmail(),donorDao.forgotPassword(username));
 		return "Your password has been sent to "+d.getDonorEmail();
 	}
 
-	//arg change
+	@Transactional
 	@Override
 	public String resetPassword(String username,String oldPassword,String newPassword) {
 		Donor d=donorDao.findDonorByDonorUsername(username);
 		if(d.getDonorPassword()==oldPassword)
 		{
-			d.setDonorPassword(newPassword);
+			donorDao.resetPassword(username,newPassword);
 			return "Your password has been Changed";
 		}
 		else {
@@ -50,15 +51,16 @@ public class DonorServiceImpl implements DonorService
 	}
 
 	//doubt
+	@Transactional
 	@Override
-	public void emailPasswordToDonor(String email) {
+	public void emailPasswordToDonor(String email,String password) {
 		System.out.println("Your credentials has been sent to "+email);
 	}
 
 	
 	
 
-	
+	@Transactional
 	@Override
 	public boolean registerDonor(Donor donor) throws DuplicateDonorException {
 		try {
@@ -77,27 +79,36 @@ public class DonorServiceImpl implements DonorService
 		}
 	}
 
+	@Transactional
 	@Override
 	public boolean login(Donor donor) throws NoSuchDonorException {
-		try {
+		//try {
 			Optional<Donor> d = donorDao.findById(donor.getDonorId());
 			if(d.isPresent()) {
-				return donorDao.login(donor);	
+				return true;/*donorDao.login(donor)*/	
 			}
 			else {
 				throw new NoSuchDonorException(donor.getDonorId());
 			}
-		}
+		/*}
 		catch(SQLException ex) {
 			System.out.println(ex.getMessage());
 			return false;
-		}
+		}*/
 	}
 
 	@Override
 	public Donation donateToNGO(Donation donation) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	/*not finished
+	@Transactional
+	@Override
+	public Donation donateToNGO(Donation donation) {
 		sendThankyouMailToDonator(donation.getDonor());
 		return donorDao.donateToNGO(donation);
-	}
+	}*/
 
 }
