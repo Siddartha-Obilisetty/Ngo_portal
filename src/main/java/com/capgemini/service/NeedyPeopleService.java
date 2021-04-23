@@ -8,7 +8,6 @@ public interface NeedyPeopleService
 {
 	public boolean registerNeedyPerson(NeedyPeople person) throws DuplicateNeedyPeopleException;
 	public boolean login(NeedyPeople person) throws NoSuchNeedyPeopleException;
-	public boolean requestForHelp(NeedyPeople person);
-	
+	public boolean requestForHelp(int np_id);
 
 }

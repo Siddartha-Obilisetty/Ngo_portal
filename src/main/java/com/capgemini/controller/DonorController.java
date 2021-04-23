@@ -26,6 +26,8 @@ public class DonorController
 		this.donorService = donorService;
 	}
 	
+	//donate to ngo,login
+	
 	@PostMapping(value="/register",consumes = "application/json")
 	public ResponseEntity<HttpStatus> registerDonor(@RequestBody Donor donor) throws DuplicateDonorException
 	{

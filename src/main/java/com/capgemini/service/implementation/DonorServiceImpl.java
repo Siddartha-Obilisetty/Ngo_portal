@@ -21,6 +21,18 @@ public class DonorServiceImpl implements DonorService
 	@Autowired
 	DonorDao donorDao;
 	
+	//not completed
+	@Transactional
+	@Override
+	public boolean login(Donor donor) throws NoSuchDonorException {
+			Optional<Donor> d = donorDao.findById(donor.getDonor_id());
+			if(d.isPresent()) {
+				return false;/*donorDao.login(donor)*/	
+			}
+			else {
+				throw new NoSuchDonorException(donor.getDonor_id());
+			}
+	}
 	
 	@Transactional(readOnly = true)
 	@Override
@@ -77,43 +89,17 @@ public class DonorServiceImpl implements DonorService
 
 	@Transactional
 	@Override
-	public boolean login(Donor donor) throws NoSuchDonorException {
-		//try {
-			Optional<Donor> d = donorDao.findById(donor.getDonor_id());
-			if(d.isPresent()) {
-				return true;/*donorDao.login(donor)*/	
-			}
-			else {
-				throw new NoSuchDonorException(donor.getDonor_id());
-			}
-		/*}
-		catch(SQLException ex) {
-			System.out.println(ex.getMessage());
-			return false;
-		}*/
-	}
-
-	@Transactional
-	@Override
-	public Donation donateToNGO(Donation donation) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	/*not finished
-	@Transactional
-	@Override
 	public Donation donateToNGO(Donation donation) {
 		sendThankyouMailToDonator(donation.getDonor());
 		return donorDao.donateToNGO(donation);
-	}*/
+	}
 	
 	
 	
 	@Transactional
 	@Override
 	public void sendThankyouMailToDonator(Donor donor) {
-		System.out.println("Thank you mail sent");
+		System.out.println("Thank you mail sent to "+donor.getEmail());
 	}
 	
 

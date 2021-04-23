@@ -2,6 +2,8 @@ package com.capgemini.model;
 
 import javax.persistence.*;
 
+import org.hibernate.annotations.Type;
+
 @Entity
 public class NeedyPeople 
 {
@@ -14,6 +16,10 @@ public class NeedyPeople
 	
 	private double family_income;
 	
+	@Enumerated(EnumType.STRING)
+	@Type(type = "com.capgemini.model.DonationType")
+	private DonationType donationType;
+	
 	@OneToOne
 	@JoinColumn(name = "address_id")
 	private Address address;
@@ -21,16 +27,18 @@ public class NeedyPeople
 	public NeedyPeople() {}
 	
 	
-	public NeedyPeople(int np_id, String np_name, String phone, double family_income,Address address) {
+	public NeedyPeople(int np_id, String np_name, String phone, double family_income, DonationType donationType,
+			Address address) {
 		super();
 		this.np_id = np_id;
 		this.np_name = np_name;
 		this.phone = phone;
 		this.family_income = family_income;
-		this.address=address;
+		this.donationType = donationType;
+		this.address = address;
 	}
 
-	
+
 	public int getNp_id() {
 		return np_id;
 	}
@@ -68,6 +76,15 @@ public class NeedyPeople
 
 	public void setFamily_income(double family_income) {
 		this.family_income = family_income;
+	}
+
+	public DonationType getDonationType() {
+		return donationType;
+	}
+
+
+	public void setDonationType(DonationType donationType) {
+		this.donationType = donationType;
 	}
 
 

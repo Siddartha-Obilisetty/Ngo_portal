@@ -18,6 +18,8 @@ import com.capgemini.model.Employee;
 @Repository
 public interface AdminDao extends JpaRepository<Admin, Integer>
 {	
+	//public boolean approveDonation(DonationDistribution distribution);
+	
 	@Modifying
 	@Query(value="insert into Address (add_Id,city,state,pin,landmark) values(:add_Id,:city,:state,:pin,:landmark)",nativeQuery = true)
 	public void addAddress(@Param("add_Id")int add_Id,@Param("city")String city,@Param("state")String state,@Param("pin")String pin,@Param("landmark")String landmark)throws SQLException;
@@ -50,9 +52,6 @@ public interface AdminDao extends JpaRepository<Admin, Integer>
 	@Query(value="select e from Employee e")
 	public List<Employee> readAllEmployees()throws SQLException;
 	
-	
-	
-	//public boolean approveDonation(DonationDistribution distribution);
 	
 }	
 	

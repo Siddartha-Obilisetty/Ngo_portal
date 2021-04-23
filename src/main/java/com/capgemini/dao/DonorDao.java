@@ -13,8 +13,9 @@ import com.capgemini.model.Donor;
 
 public interface DonorDao extends JpaRepository<Donor, Integer>
 {
-
-	//public Donation donateToNGO(Donation donation);
+	@Modifying
+	@Query(value="update DonationBox d set d.total_collection=d.total_collection+:donation.donation_amount",nativeQuery = true)
+	public Donation donateToNGO(Donation donation);
 
 	//public boolean login(Donor donor) throws SQLException;
 	

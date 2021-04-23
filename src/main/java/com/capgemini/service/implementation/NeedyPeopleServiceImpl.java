@@ -22,10 +22,20 @@ public class NeedyPeopleServiceImpl implements NeedyPeopleService
 	//not finished
 	@Transactional
 	@Override
-	public boolean requestForHelp(NeedyPeople person) {
-		// TODO Auto-generated method stub
-		return false;
+	public boolean requestForHelp(int np_id) {
+		return needyPeople.requestForHelp(np_id);
 	}
+
+	@Transactional
+	@Override
+	public boolean login(NeedyPeople person) throws NoSuchNeedyPeopleException {
+		Optional<NeedyPeople> np = needyPeople.findById(person.getNp_id());
+		if(np.isEmpty()) {
+			throw new NoSuchNeedyPeopleException(person.getNp_id());
+		}
+		return false;/*needyPeople.readLoginData(person);*/
+	}
+	
 	
 	@Transactional
 	@Override
@@ -47,15 +57,6 @@ public class NeedyPeopleServiceImpl implements NeedyPeopleService
 		return false;
 	}
 
-	@Transactional
-	@Override
-	public boolean login(NeedyPeople person) throws NoSuchNeedyPeopleException {
-		Optional<NeedyPeople> np = needyPeople.findById(person.getNp_id());
-		if(np.isEmpty()) {
-			throw new NoSuchNeedyPeopleException(person.getNp_id());
-		}
-		return false;/*needyPeople.readLoginData(person);*/
-	}
 
 
 }

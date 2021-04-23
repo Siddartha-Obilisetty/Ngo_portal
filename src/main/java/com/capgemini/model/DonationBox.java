@@ -6,22 +6,37 @@ import javax.persistence.*;
 public class DonationBox 
 {
 	@Id
-	private String ngo_name;
+	private String ngo_name="Sprint NGO";
 	
-	private String reg_no;
+	private String reg_no="1234";
 	
-	private String acc_no;
+	private String acc_no="xxxxxxxxxxxx2021";
 	
-	private double total_collection;
+	private double total_collection=10000.0;
+	
+	private double total_books_collection=0L;
+	
+	private double total_clothes_collection=0L;
+	
+	private double total_edible_collection=0L;
+	
+	private double total_other_collection=0L;
+	
 	
 	public DonationBox() {}
 
-	public DonationBox(String ngo_name, String reg_no, String acc_no, double total_collection) {
-		super();
+	
+	public DonationBox(String ngo_name, String reg_no, String acc_no, double total_collection,
+			double total_books_collection, double total_clothes_collection, double total_edible_collection,
+			double total_other_collection) {
 		this.ngo_name = ngo_name;
 		this.reg_no = reg_no;
 		this.acc_no = acc_no;
 		this.total_collection = total_collection;
+		this.total_books_collection = total_books_collection;
+		this.total_clothes_collection = total_clothes_collection;
+		this.total_edible_collection = total_edible_collection;
+		this.total_other_collection = total_other_collection;
 	}
 
 	public String getNgo_name() {
@@ -54,6 +69,46 @@ public class DonationBox
 
 	public void setTotal_collection(double total_collection) {
 		this.total_collection = total_collection;
+	}
+
+
+	public double getTotal_books_collection() {
+		return total_books_collection;
+	}
+
+
+	public void setTotal_books_collection(double total_books_collection) {
+		this.total_books_collection = total_books_collection;
+	}
+
+
+	public double getTotal_clothes_collection() {
+		return total_clothes_collection;
+	}
+
+
+	public void setTotal_clothes_collection(double total_clothes_collection) {
+		this.total_clothes_collection = total_clothes_collection;
+	}
+
+
+	public double getTotal_edible_collection() {
+		return total_edible_collection;
+	}
+
+
+	public void setTotal_edible_collection(double total_edible_collection) {
+		this.total_edible_collection = total_edible_collection;
+	}
+
+
+	public double getTotal_other_collection() {
+		return total_other_collection;
+	}
+
+
+	public void setTotal_other_collection(double total_other_collection) {
+		this.total_other_collection = total_other_collection;
 	}
 	
 	
