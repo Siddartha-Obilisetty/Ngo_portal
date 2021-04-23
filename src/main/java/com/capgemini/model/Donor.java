@@ -19,7 +19,7 @@ public class Donor
 	private String password;
 	
 	@OneToOne
-	@JoinColumn(name = "address_id")
+	@JoinColumn(name = "add_Id")
 	private Address address;
 		
 	public Donor() {}

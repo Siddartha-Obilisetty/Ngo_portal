@@ -39,8 +39,11 @@ public class EmployeeServiceImpl implements EmployeeService
 	@Transactional
 	@Override
 	public boolean addNeedyPerson(NeedyPeople person) throws DuplicateNeedyPeopleException {
-		NeedyPeople np = employee.readNeedyPeopleById(person.getNp_id());
-		if(np!=null) {
+		NeedyPeople n = employee.readNeedyPeopleById(person.getNp_id());
+		if(n!=null) {
+			//employee.addAddress(n.getAddress().getAdd_Id(), n.getAddress().getCity(),n.getAddress().getState(), n.getAddress().getPin(), n.getAddress().getLandmark());
+			//employee.createNeedyPerson(n.getNp_id(), n.getNp_name(), n.getPhone(), n.getFamily_income(), n.getAddress().getAdd_Id());
+			
 			return employee.createNeedyPerson(person);
 		}
 		else {

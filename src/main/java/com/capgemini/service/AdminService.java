@@ -17,5 +17,5 @@ public interface AdminService
 	public List<Employee> findAllEmployee();
 	public boolean approveDonation(DonationDistribution distribution);
 	public void addAddress(Address address);
-	public void removeAddress(int add_Id);
+	public boolean removeAddress(int add_Id);
 }

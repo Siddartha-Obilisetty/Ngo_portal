@@ -31,50 +31,28 @@ public class AdminController
 	
 	
 	@PostMapping(value="/employee/add",consumes = "application/json")
-	public ResponseEntity<HttpStatus> addEmployee(@RequestBody Employee employee)
+	public ResponseEntity<HttpStatus> addEmployee(@RequestBody Employee employee) throws DuplicateEmployeeException
 	{
-		try {
-			System.out.println("in controller");
-			adminService.addAddress(employee.getAddress());
-			System.out.println("added address");
-			adminService.addEmployee(employee);
-			System.out.println("added employee");
-			return new ResponseEntity<HttpStatus>(HttpStatus.OK);
-		}
-	    catch(DuplicateEmployeeException ex){
-	    	System.out.println(ex.getMessage());
-	    	return new ResponseEntity<HttpStatus>(HttpStatus.NOT_ACCEPTABLE);
-	    }
+		adminService.addEmployee(employee);
+		return new ResponseEntity<HttpStatus>(HttpStatus.OK);
+
 	}
 	
 	
 	@PutMapping(value="/employee/update",consumes="application/json")
-	public ResponseEntity<HttpStatus> modifyEmployee(@RequestBody Employee employee)
+	public ResponseEntity<HttpStatus> modifyEmployee(@RequestBody Employee employee) throws NoSuchEmployeeException
 	{
-	    try {
-			adminService.modifyEmployee(employee);
-		    return new ResponseEntity<HttpStatus>(HttpStatus.OK);
-		} catch (NoSuchEmployeeException e) {
-			System.out.println(e.getMessage());
-	    	return new ResponseEntity<>(null,HttpStatus.NOT_ACCEPTABLE);
-		}
+	    adminService.modifyEmployee(employee);
+		 return new ResponseEntity<HttpStatus>(HttpStatus.OK);
 	}
 	
 	
 	@DeleteMapping(value="/employee/delete/{employeeId}")
-	public ResponseEntity<HttpStatus> removeEmployee(@PathVariable("employeeId")int employeeId)
+	public ResponseEntity<HttpStatus> removeEmployee(@PathVariable("employeeId")int employeeId) throws NoSuchEmployeeException
 	{
-		Employee e;
-		try {
-			e = adminService.findEmployeeById(employeeId);
-			adminService.removeAddress(e.getAddress().getAdd_Id());
-			adminService.removeEmployee(employeeId);
-			return new ResponseEntity<HttpStatus>(HttpStatus.OK);
-		}
-		catch (NoSuchEmployeeException ex) {
-			System.out.println(ex.getMessage());
-	    	return new ResponseEntity<>(null,HttpStatus.NOT_ACCEPTABLE);
-		}
+		Employee e = adminService.findEmployeeById(employeeId);
+		adminService.removeEmployee(employeeId);
+		return new ResponseEntity<HttpStatus>(HttpStatus.OK);
 	}
 	
 	
@@ -84,23 +62,13 @@ public class AdminController
 	}
 	
 	@GetMapping(path="/employee/getById/{empid}",produces = "application/json")
-	public ResponseEntity<Employee> findEmployeeById(@PathVariable(name = "empid")int empid){
-		try {
-			return new ResponseEntity<Employee>(adminService.findEmployeeById(empid),HttpStatus.OK);
-		} catch (NoSuchEmployeeException e) {
-			System.out.println(e.getMessage());
-	    	return new ResponseEntity<>(null,HttpStatus.NOT_ACCEPTABLE);
-		}
+	public ResponseEntity<Employee> findEmployeeById(@PathVariable(name = "empid")int empid) throws NoSuchEmployeeException{
+		return new ResponseEntity<Employee>(adminService.findEmployeeById(empid),HttpStatus.OK);
 	}
 	
 	@GetMapping(path="/employee/getByName/{ename}",produces = "application/json")
-	public ResponseEntity<List<Employee>> findEmployeeByName(@PathVariable(name = "ename")String ename){
-		try {
-			return new ResponseEntity<List<Employee>>(adminService.findEmployeeByName(ename),HttpStatus.OK);
-		} catch (NoSuchEmployeeException e) {
-			System.out.println(e.getMessage());
-	    	return new ResponseEntity<>(null,HttpStatus.NOT_ACCEPTABLE);
-		}
+	public ResponseEntity<List<Employee>> findEmployeeByName(@PathVariable(name = "ename")String ename) throws NoSuchEmployeeException{
+		return new ResponseEntity<List<Employee>>(adminService.findEmployeeByName(ename),HttpStatus.OK);
 		
 	}
 	

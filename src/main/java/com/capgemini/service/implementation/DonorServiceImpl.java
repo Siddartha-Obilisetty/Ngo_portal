@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.capgemini.dao.DonorDao;
 import com.capgemini.exception.DuplicateDonorException;
 import com.capgemini.exception.NoSuchDonorException;
+import com.capgemini.model.Address;
 import com.capgemini.model.Donation;
 import com.capgemini.model.Donor;
 import com.capgemini.service.DonorService;
@@ -19,16 +20,9 @@ public class DonorServiceImpl implements DonorService
 {
 	@Autowired
 	DonorDao donorDao;
-
-	//doubt
-	@Transactional
-	@Override
-	public void sendThankyouMailToDonator(Donor donor) {
-		System.out.println("Thank you mail sent");
-	}
 	
-	//doubt
-	@Transactional
+	
+	@Transactional(readOnly = true)
 	@Override
 	public String forgotPassword(String username) {
 		Donor d=donorDao.findDonorByDonorUsername(username);
@@ -50,15 +44,16 @@ public class DonorServiceImpl implements DonorService
 		}
 	}
 
-	//doubt
 	@Transactional
-	@Override
-	public void emailPasswordToDonor(String email,String password) {
-		System.out.println("Your credentials has been sent to "+email);
+	public void addAddress(Address a)
+	{
+		//admin.addAddress(a);
+		try {
+			donorDao.addAddress(a.getAdd_Id(),a.getCity(),a.getState(),a.getPin(),a.getLandmark());
+		} catch (SQLException e) {
+			System.out.println(e.getMessage());
+		}
 	}
-
-	
-	
 
 	@Transactional
 	@Override
@@ -69,7 +64,8 @@ public class DonorServiceImpl implements DonorService
 				throw new DuplicateDonorException(donor.getDonor_id());
 			}
 			else {
-				donorDao.createDonor(donor);
+				this.addAddress(d.getAddress());
+				donorDao.createDonor(d.getDonor_id(), d.getDonor_name(), d.getEmail(), d.getPhone(), d.getUsername(), d.getPassword(), d.getAddress().getAdd_Id());
 				return true;
 			}
 		}
@@ -97,6 +93,7 @@ public class DonorServiceImpl implements DonorService
 		}*/
 	}
 
+	@Transactional
 	@Override
 	public Donation donateToNGO(Donation donation) {
 		// TODO Auto-generated method stub
@@ -110,5 +107,20 @@ public class DonorServiceImpl implements DonorService
 		sendThankyouMailToDonator(donation.getDonor());
 		return donorDao.donateToNGO(donation);
 	}*/
+	
+	
+	
+	@Transactional
+	@Override
+	public void sendThankyouMailToDonator(Donor donor) {
+		System.out.println("Thank you mail sent");
+	}
+	
+
+	@Transactional
+	@Override
+	public void emailPasswordToDonor(String email,String password) {
+		System.out.println("Your credentials has been sent to "+email);
+	}
 
 }

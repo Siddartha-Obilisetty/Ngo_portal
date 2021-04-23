@@ -20,23 +20,23 @@ public interface AdminDao extends JpaRepository<Admin, Integer>
 {	
 	@Modifying
 	@Query(value="insert into Address (add_Id,city,state,pin,landmark) values(:add_Id,:city,:state,:pin,:landmark)",nativeQuery = true)
-	@Transactional
-	public void addAddress(@Param("add_Id")int add_Id,@Param("city")String city,@Param("state")String state,@Param("pin")String pin,@Param("landmark")String landmark);
+	public void addAddress(@Param("add_Id")int add_Id,@Param("city")String city,@Param("state")String state,@Param("pin")String pin,@Param("landmark")String landmark)throws SQLException;
 	
 	@Modifying
 	@Query(value="insert into Employee (empid,ename,email,phone,username,password,add_Id) values (:empid,:ename,:email,:phone,:username,:password,:add_id)",nativeQuery = true)
-	@Transactional
-	public int createEmployee(@Param("empid")int empid,@Param("ename")String ename,@Param("email")String email,@Param("phone")String phone,@Param("username")String username,@Param("password")String password,@Param("add_id")int add_id);
+	public int createEmployee(@Param("empid")int empid,@Param("ename")String ename,@Param("email")String email,@Param("phone")String phone,@Param("username")String username,@Param("password")String password,@Param("add_id")int add_id)throws SQLException;
 	
 	
 	@Modifying
 	@Query(value="update Address a set a.city=:#{#add.city},a.state=:#{#add.state},a.pin=:#{#add.pin},a.landmark=:#{#add.landmark} where a.add_Id=:#{#add.add_Id}")
-	@Transactional
 	public void updateAddress(@Param("add")Address address);
 	@Modifying
 	@Query(value="update Employee e set e.ename=:#{#emp.ename},e.email=:#{#emp.email},e.phone=:#{#emp.phone},e.username=:#{#emp.username},e.password=:#{#emp.password} where e.empid=:#{#emp.empid}")
 	public int updateEmployee(@Param("emp")Employee emp);
 	
+	@Modifying
+	@Query(value="delete Address a where a.add_Id=:add_Id",nativeQuery = true)
+	public void deleteAddress(@Param("add_Id")int add_Id)throws SQLException;
 	@Modifying
 	@Query(value="delete Employee e where e.empid=:empid",nativeQuery = true)
 	public int deleteEmployee(@Param("empid")int employeeId)throws SQLException;
@@ -50,10 +50,7 @@ public interface AdminDao extends JpaRepository<Admin, Integer>
 	@Query(value="select e from Employee e")
 	public List<Employee> readAllEmployees()throws SQLException;
 	
-	@Modifying
-	@Query(value="delete Address a where a.add_Id=:add_Id",nativeQuery = true)
-	@Transactional
-	public void deleteAddress(@Param("add_Id")int add_Id);
+	
 	
 	//public boolean approveDonation(DonationDistribution distribution);
 	

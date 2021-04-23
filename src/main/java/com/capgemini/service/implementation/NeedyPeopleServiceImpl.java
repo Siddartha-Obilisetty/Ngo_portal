@@ -1,5 +1,6 @@
 package com.capgemini.service.implementation;
 
+import java.sql.SQLException;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,17 +34,27 @@ public class NeedyPeopleServiceImpl implements NeedyPeopleService
 		if(np.isPresent()) {
 			throw new DuplicateNeedyPeopleException(person.getNp_id());
 		}
-		return needyPeople.createNeedyPerson(person);
+		try {
+			NeedyPeople n=np.get();
+			needyPeople.addAddress(n.getAddress().getAdd_Id(), n.getAddress().getCity(),n.getAddress().getState(), n.getAddress().getPin(), n.getAddress().getLandmark());
+			needyPeople.createNeedyPerson(n.getNp_id(), n.getNp_name(), n.getPhone(), n.getFamily_income(), n.getAddress().getAdd_Id());
+			return true;
+		}
+		catch(SQLException e)
+		{
+			System.out.println(e.getMessage());
+		}
+		return false;
 	}
 
 	@Transactional
 	@Override
 	public boolean login(NeedyPeople person) throws NoSuchNeedyPeopleException {
 		Optional<NeedyPeople> np = needyPeople.findById(person.getNp_id());
-		if(np.isPresent()) {
+		if(np.isEmpty()) {
 			throw new NoSuchNeedyPeopleException(person.getNp_id());
 		}
-		return true;/*needyPeople.readLoginData(person);*/
+		return false;/*needyPeople.readLoginData(person);*/
 	}
 
 

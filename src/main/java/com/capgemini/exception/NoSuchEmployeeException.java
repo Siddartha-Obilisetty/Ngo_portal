@@ -17,7 +17,7 @@ public class NoSuchEmployeeException extends Exception{
 		if(donorId!=0)
 			return "The Employee with EmployeeId "+donorId+" doesn't exists!";
 		else
-			return "The Donor with Name "+name+" doesn't exists!";
+			return "The Employee with Name "+name+" doesn't exists!";
 	}
 
 }
