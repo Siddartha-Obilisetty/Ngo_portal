@@ -32,15 +32,15 @@ public class DonorServiceImpl implements DonorService
 	@Override
 	public String forgotPassword(String username) {
 		Donor d=donorDao.findDonorByDonorUsername(username);
-		emailPasswordToDonor(d.getDonorEmail(),donorDao.forgotPassword(username));
-		return "Your password has been sent to "+d.getDonorEmail();
+		emailPasswordToDonor(d.getEmail(),donorDao.forgotPassword(username));
+		return "Your password has been sent to "+d.getEmail();
 	}
 
 	@Transactional
 	@Override
 	public String resetPassword(String username,String oldPassword,String newPassword) {
 		Donor d=donorDao.findDonorByDonorUsername(username);
-		if(d.getDonorPassword()==oldPassword)
+		if(d.getPassword()==oldPassword)
 		{
 			donorDao.resetPassword(username,newPassword);
 			return "Your password has been Changed";
@@ -64,9 +64,9 @@ public class DonorServiceImpl implements DonorService
 	@Override
 	public boolean registerDonor(Donor donor) throws DuplicateDonorException {
 		try {
-			Donor d = donorDao.findDonorByDonorUsername(donor.getDonorUsername());
+			Donor d = donorDao.findDonorByDonorUsername(donor.getUsername());
 			if(d!=null) {
-				throw new DuplicateDonorException(donor.getDonorId());
+				throw new DuplicateDonorException(donor.getDonor_id());
 			}
 			else {
 				donorDao.createDonor(donor);
@@ -83,12 +83,12 @@ public class DonorServiceImpl implements DonorService
 	@Override
 	public boolean login(Donor donor) throws NoSuchDonorException {
 		//try {
-			Optional<Donor> d = donorDao.findById(donor.getDonorId());
+			Optional<Donor> d = donorDao.findById(donor.getDonor_id());
 			if(d.isPresent()) {
 				return true;/*donorDao.login(donor)*/	
 			}
 			else {
-				throw new NoSuchDonorException(donor.getDonorId());
+				throw new NoSuchDonorException(donor.getDonor_id());
 			}
 		/*}
 		catch(SQLException ex) {

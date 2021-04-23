@@ -12,14 +12,11 @@ public class DonationDistribution
 	@Id
 	private int distributionid;
 	
-	@Column(name="amt_distributed")
-	private double amountDistributed;
+	private double amt_distributed;
 	
-	@Column(name="dod")
-	private Date dateOfDistribution;
+	private Date dod;
 	
-	@Column(name="app_or_rej_date")
-	private Date approvalOrRejectedDate;
+	private Date app_or_rej_date;
 	
 	@Enumerated(EnumType.STRING)
 	@Type(type = "com.capgemini.model.DonationDistributionStatus")
@@ -37,43 +34,66 @@ public class DonationDistribution
 	
 
 	@OneToOne
-	@JoinColumn(name = "employee_id")
+	@JoinColumn(name = "empid")
 	private Employee employee;
 		
 	public DonationDistribution() {}
 	
-	public DonationDistribution(int distributionid, double amountDistributed, Date dateOfDistribution,
-			Date approvalOrRejectedDate, DonationDistributionStatus status) {
+
+	public DonationDistribution(int distributionid, double amt_distributed, Date dod, Date app_or_rej_date,
+			DonationDistributionStatus status, NeedyPeople needyPeople, DonationItem donationItem, Employee employee) {
+		super();
 		this.distributionid = distributionid;
-		this.amountDistributed = amountDistributed;
-		this.dateOfDistribution = dateOfDistribution;
-		this.approvalOrRejectedDate = approvalOrRejectedDate;
+		this.amt_distributed = amt_distributed;
+		this.dod = dod;
+		this.app_or_rej_date = app_or_rej_date;
 		this.status = status;
+		this.needyPeople = needyPeople;
+		this.donationItem = donationItem;
+		this.employee = employee;
 	}
+
+
 	public int getDistributionid() {
 		return distributionid;
 	}
+
+
 	public void setDistributionid(int distributionid) {
 		this.distributionid = distributionid;
 	}
-	public double getAmountDistributed() {
-		return amountDistributed;
+
+
+	public double getAmt_distributed() {
+		return amt_distributed;
 	}
-	public void setAmountDistributed(double amountDistributed) {
-		this.amountDistributed = amountDistributed;
+
+
+	public void setAmt_distributed(double amt_distributed) {
+		this.amt_distributed = amt_distributed;
 	}
-	public Date getDateOfDistribution() {
-		return dateOfDistribution;
+
+
+	public Date getDod() {
+		return dod;
 	}
-	public void setDateOfDistribution(Date dateOfDistribution) {
-		this.dateOfDistribution = dateOfDistribution;
+
+
+	public void setDod(Date dod) {
+		this.dod = dod;
 	}
-	public Date getApprovalOrRejectedDate() {
-		return approvalOrRejectedDate;
+
+
+	public Date getApp_or_rej_date() {
+		return app_or_rej_date;
 	}
-	public void setApprovalOrRejectedDate(Date approvalOrRejectedDate) {
-		this.approvalOrRejectedDate = approvalOrRejectedDate;
+
+
+	public void setApp_or_rej_date(Date app_or_rej_date) {
+		this.app_or_rej_date = app_or_rej_date;
 	}
+
+
 	public DonationDistributionStatus getStatus() {
 		return status;
 	}

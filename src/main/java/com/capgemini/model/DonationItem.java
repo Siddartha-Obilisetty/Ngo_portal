@@ -8,11 +8,9 @@ import org.hibernate.annotations.Type;
 public class DonationItem 
 {
 	@Id
-	@Column(name="item_id")
-	private int itemId;
+	private int item_id;
 	
-	@Column(name="item_desc")
-	private String itemDescription;
+	private String item_desc;
 	
 	@Enumerated(EnumType.STRING)
 	@Type(type = "com.capgemini.model.DonationType")
@@ -20,23 +18,35 @@ public class DonationItem
 	
 	public DonationItem() {}
 	
-	public DonationItem(int itemId, String itemDescription, DonationType donationType) {
-		this.itemId = itemId;
-		this.itemDescription = itemDescription;
+	
+	public DonationItem(int item_id, String item_desc, DonationType donationType) {
+		super();
+		this.item_id = item_id;
+		this.item_desc = item_desc;
 		this.donationType = donationType;
 	}
-	public int getItemId() {
-		return itemId;
+
+	
+	public int getItem_id() {
+		return item_id;
 	}
-	public void setItemId(int itemId) {
-		this.itemId = itemId;
+
+
+	public void setItem_id(int item_id) {
+		this.item_id = item_id;
 	}
-	public String getItemDescription() {
-		return itemDescription;
+
+
+	public String getItem_desc() {
+		return item_desc;
 	}
-	public void setItemDescription(String itemDescription) {
-		this.itemDescription = itemDescription;
+
+
+	public void setItem_desc(String item_desc) {
+		this.item_desc = item_desc;
 	}
+
+
 	public DonationType getDonationType() {
 		return donationType;
 	}

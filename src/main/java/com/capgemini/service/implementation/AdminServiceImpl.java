@@ -2,6 +2,7 @@ package com.capgemini.service.implementation;
 import com.capgemini.dao.AdminDao;
 import com.capgemini.exception.DuplicateEmployeeException;
 import com.capgemini.exception.NoSuchEmployeeException;
+import com.capgemini.model.Address;
 import com.capgemini.model.DonationDistribution;
 import com.capgemini.model.Employee;
 import com.capgemini.service.AdminService;
@@ -20,23 +21,62 @@ public class AdminServiceImpl implements AdminService
 	AdminDao admin;
 
 	//not finished
+			@Transactional
+			@Override
+			public boolean approveDonation(DonationDistribution distribution) {
+				// TODO Auto-generated method stub
+				return false;
+			}
+	
+			@Transactional
+			@Override
+			public boolean removeEmployee(int employeeId) throws NoSuchEmployeeException {
+				try{
+					Employee e = null;
+					e= admin.readEmployeeById(employeeId);
+					if(e!=null) {
+						admin.deleteEmployee(employeeId);
+						return true;
+					}
+					else {
+						throw new NoSuchEmployeeException(employeeId);
+					}
+				}
+				catch(SQLException ex) {
+					System.out.println(ex.getMessage());
+					return false;
+				}
+			}
+	
+	
+	
 	@Transactional
-	@Override
-	public boolean approveDonation(DonationDistribution distribution) {
-		// TODO Auto-generated method stub
-		return false;
+	public void addAddress(Address a)
+	{
+		//admin.addAddress(a);
+		admin.addAddress(a.getAdd_Id(),a.getCity(),a.getState(),a.getPin(),a.getLandmark());
+
+	}
+
+	@Transactional
+	public void removeAddress(int add_Id) {
+		admin.deleteAddress(add_Id);
 	}
 	
 	@Transactional
 	@Override
-	public boolean addEmployee(Employee employee) throws DuplicateEmployeeException {
+	public boolean addEmployee(Employee e) throws DuplicateEmployeeException {
 		try{
-			Employee e = admin.readEmployeeById(employee.getEmployeeId());
-			if(e!=null) {
-				return admin.createEmployee(employee);
+			Employee emp =null;
+			emp= admin.readEmployeeById(e.getEmpid());
+			if(emp==null) {
+				System.out.println(e.getEmpid()+" in service");
+				int i=admin.createEmployee(e.getEmpid(),e.getEname(),e.getEmail(),e.getPhone(),e.getUsername(),e.getPassword(), e.getAddress().getAdd_Id());
+				System.out.println("added emp in service");
+				return true;
 			}
 			else {
-				throw new DuplicateEmployeeException(employee.getEmployeeId());
+				throw new DuplicateEmployeeException(e.getEmpid());
 			}
 		}
 		catch(SQLException ex) {
@@ -44,36 +84,43 @@ public class AdminServiceImpl implements AdminService
 			return false;
 		}
 	}
-
+	
+	/*
+	
 	@Transactional
-	@Override
-	public Employee modifyEmployee(Employee employee) throws NoSuchEmployeeException {
-		Employee e=null;
+	public boolean addEmployee(Employee employee) throws DuplicateEmployeeException {
 		try{
-			e = admin.readEmployeeById(employee.getEmployeeId());
-			if(e!=null) {
-				return admin.updateEmployee(employee);
+			Employee e =null;
+			e= admin.readEmployeeById(employee.getEmpid());
+			if(e==null) {
+				int i=admin.createEmployee(employee);
+				System.out.println(i);
+				return true;
 			}
 			else {
-				throw new NoSuchEmployeeException(employee.getEmployeeId());
+				throw new DuplicateEmployeeException(employee.getEmpid());
 			}
 		}
 		catch(SQLException ex) {
 			System.out.println(ex.getMessage());
-			return null;
+			return false;
 		}
 	}
-
+	*/
+	
 	@Transactional
 	@Override
-	public boolean removeEmployee(int employeeId) throws NoSuchEmployeeException {
+	public boolean modifyEmployee(Employee employee) throws NoSuchEmployeeException {
+		Employee e=null;
 		try{
-			Employee e = admin.readEmployeeById(employeeId);
+			e = admin.readEmployeeById(employee.getEmpid());
 			if(e!=null) {
-				return admin.deleteEmployee(employeeId);
+				admin.updateAddress(employee.getAddress());
+				admin.updateEmployee(employee);
+				return true;
 			}
 			else {
-				throw new NoSuchEmployeeException(employeeId);
+				throw new NoSuchEmployeeException(employee.getEmpid());
 			}
 		}
 		catch(SQLException ex) {
@@ -89,7 +136,6 @@ public class AdminServiceImpl implements AdminService
 		try{
 			e = admin.readEmployeeById(employeeId);
 			if(e!=null) {
-				e = admin.readEmployeeById(employeeId);
 				return e;
 			}
 			else {
@@ -133,4 +179,5 @@ public class AdminServiceImpl implements AdminService
 		}
 	}
 
+	
 }

@@ -34,17 +34,17 @@ public class EmployeeServiceImpl implements EmployeeService
 	public boolean login(Employee employee) throws NoSuchEmployeeException {
 		// TODO Auto-generated method stub
 		return false;
-	}
+	}	
 
 	@Transactional
 	@Override
 	public boolean addNeedyPerson(NeedyPeople person) throws DuplicateNeedyPeopleException {
-		NeedyPeople np = employee.readNeedyPeopleById(person.getNeedyPersonid());
+		NeedyPeople np = employee.readNeedyPeopleById(person.getNp_id());
 		if(np!=null) {
 			return employee.createNeedyPerson(person);
 		}
 		else {
-			throw new DuplicateNeedyPeopleException(person.getNeedyPersonid());
+			throw new DuplicateNeedyPeopleException(person.getNp_id());
 		}
 		
 	}
@@ -52,12 +52,12 @@ public class EmployeeServiceImpl implements EmployeeService
 	@Transactional
 	@Override
 	public boolean removeNeedyPerson(NeedyPeople person) throws NoSuchNeedyPeopleException {
-		NeedyPeople np = employee.readNeedyPeopleById(person.getNeedyPersonid());
+		NeedyPeople np = employee.readNeedyPeopleById(person.getNp_id());
 		if(np!=null) {
-			return employee.deleteNeedyPerson(person.getNeedyPersonid());
+			return employee.deleteNeedyPerson(person.getNp_id());
 		}
 		else {
-			throw new NoSuchNeedyPeopleException(person.getNeedyPersonid());
+			throw new NoSuchNeedyPeopleException(person.getNp_id());
 		}
 	}
 

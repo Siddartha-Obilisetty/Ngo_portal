@@ -6,17 +6,13 @@ import javax.persistence.*;
 public class NeedyPeople 
 {
 	@Id
-	@Column(name="np_id")
-	private int needyPersonid;
+	private int np_id;
 	
-	@Column(name="np_name")
-	private String needyPersonName;
+	private String np_name;
 	
-	@Column(name="np_phone")
 	private String phone;
 	
-	@Column(name="np_family_income")
-	private double familyIncome;
+	private double family_income;
 	
 	@OneToOne
 	@JoinColumn(name = "address_id")
@@ -24,37 +20,57 @@ public class NeedyPeople
 	
 	public NeedyPeople() {}
 	
-	public NeedyPeople(int needyPersonid, String needyPersonName, String phone, double familyIncome, Address address) {
-		this.needyPersonid = needyPersonid;
-		this.needyPersonName = needyPersonName;
+	
+	public NeedyPeople(int np_id, String np_name, String phone, double family_income,Address address) {
+		super();
+		this.np_id = np_id;
+		this.np_name = np_name;
 		this.phone = phone;
-		this.familyIncome = familyIncome;
-		this.address = address;
+		this.family_income = family_income;
+		this.address=address;
 	}
-	public int getNeedyPersonid() {
-		return needyPersonid;
+
+	
+	public int getNp_id() {
+		return np_id;
 	}
-	public void setNeedyPersonid(int needyPersonid) {
-		this.needyPersonid = needyPersonid;
+
+
+	public void setNp_id(int np_id) {
+		this.np_id = np_id;
 	}
-	public String getNeedyPersonName() {
-		return needyPersonName;
+
+
+	public String getNp_name() {
+		return np_name;
 	}
-	public void setNeedyPersonName(String needyPersonName) {
-		this.needyPersonName = needyPersonName;
+
+
+	public void setNp_name(String np_name) {
+		this.np_name = np_name;
 	}
+
+
 	public String getPhone() {
 		return phone;
 	}
+
+
 	public void setPhone(String phone) {
 		this.phone = phone;
 	}
-	public double getFamilyIncome() {
-		return familyIncome;
+
+
+	public double getFamily_income() {
+		return family_income;
 	}
-	public void setFamilyIncome(double familyIncome) {
-		this.familyIncome = familyIncome;
+
+
+	public void setFamily_income(double family_income) {
+		this.family_income = family_income;
 	}
+
+
 	public Address getAddress() {
 		return address;
 	}

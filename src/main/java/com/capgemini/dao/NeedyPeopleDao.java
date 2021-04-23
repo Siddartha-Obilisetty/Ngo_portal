@@ -9,7 +9,7 @@ import com.capgemini.model.NeedyPeople;
 public interface NeedyPeopleDao  extends JpaRepository<NeedyPeople, Integer>
 {
 	@Modifying
-	@Query(value="insert into needypeople values(:#{#person})",nativeQuery=true)
+	@Query(value="insert into needypeople values(:#{#person})",nativeQuery = true)
 	public boolean createNeedyPerson(NeedyPeople person);
 	//public boolean readLoginData(NeedyPeople person);
 	//public boolean requestForHelp(NeedyPeople person);

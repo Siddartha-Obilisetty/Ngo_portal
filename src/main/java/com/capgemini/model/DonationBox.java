@@ -6,49 +6,56 @@ import javax.persistence.*;
 public class DonationBox 
 {
 	@Id
-	@Column(name="ngo_name")
-	private String ngoName;
+	private String ngo_name;
 	
-	@Column(name="reg_no")
-	private String registrationNumber;
+	private String reg_no;
 	
-	@Column(name="acc_no")
-	private String accountNumber;
+	private String acc_no;
 	
-	@Column(name="total_collection")
-	private double totalCollection;
+	private double total_collection;
 	
 	public DonationBox() {}
+
+	public DonationBox(String ngo_name, String reg_no, String acc_no, double total_collection) {
+		super();
+		this.ngo_name = ngo_name;
+		this.reg_no = reg_no;
+		this.acc_no = acc_no;
+		this.total_collection = total_collection;
+	}
+
+	public String getNgo_name() {
+		return ngo_name;
+	}
+
+	public void setNgo_name(String ngo_name) {
+		this.ngo_name = ngo_name;
+	}
+
+	public String getReg_no() {
+		return reg_no;
+	}
+
+	public void setReg_no(String reg_no) {
+		this.reg_no = reg_no;
+	}
+
+	public String getAcc_no() {
+		return acc_no;
+	}
+
+	public void setAcc_no(String acc_no) {
+		this.acc_no = acc_no;
+	}
+
+	public double getTotal_collection() {
+		return total_collection;
+	}
+
+	public void setTotal_collection(double total_collection) {
+		this.total_collection = total_collection;
+	}
 	
-	public DonationBox(String ngoName, String registrationNumber, String accountNumber, double totalCollection) {
-		this.ngoName = ngoName;
-		this.registrationNumber = registrationNumber;
-		this.accountNumber = accountNumber;
-		this.totalCollection = totalCollection;
-	}
-	public String getNgoName() {
-		return ngoName;
-	}
-	public void setNgoName(String ngoName) {
-		this.ngoName = ngoName;
-	}
-	public String getRegistrationNumber() {
-		return registrationNumber;
-	}
-	public void setRegistrationNumber(String registrationNumber) {
-		this.registrationNumber = registrationNumber;
-	}
-	public String getAccountNumber() {
-		return accountNumber;
-	}
-	public void setAccountNumber(String accountNumber) {
-		this.accountNumber = accountNumber;
-	}
-	public double getTotalCollection() {
-		return totalCollection;
-	}
-	public void setTotalCollection(double totalCollection) {
-		this.totalCollection = totalCollection;
-	}
+	
 	
 }

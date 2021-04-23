@@ -2,13 +2,13 @@ package com.capgemini.exception;
 
 public class DuplicateDonorException extends Exception
 {
-	private int donorid;
-	public DuplicateDonorException(int donorid){
-		this.donorid=donorid;
+	private int donor_id;
+	public DuplicateDonorException(int donor_id){
+		this.donor_id=donor_id;
 	}
 	@Override
 	public String getMessage() {
-		return "The Donor with DonorId "+donorid+" already exists!";
+		return "The Donor with DonorId "+donor_id+" already exists!";
 	}
 }
 

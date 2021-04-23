@@ -6,50 +6,56 @@ import javax.persistence.*;
 public class Employee 
 {
 	@Id
-	@Column(name="emp_id")
-	private int employeeId;
+	private int empid;
 	
-	@Column(name="emp_name")
-	private String employeeName;
+	private String ename;
 	
-	@Column(name="emp_email")
 	private String email;
 	
-	@Column(name="emp_phone")
 	private String phone;
 	
-	@Column(name="emp_username")
 	private String username;
 	
-	@Column(name="emp_password")
 	private String password;
 	
 	@OneToOne
-	@JoinColumn(name = "address_id")
+	@JoinColumn(name = "add_Id")
 	private Address address;
 	
 	public Employee() {}
 	
-	public Employee(int employeeId, String employeeName, String email, String phone, String username, String password) {
-		this.employeeId = employeeId;
-		this.employeeName = employeeName;
+	public Employee(int empid, String ename, String email, String phone, String username, String password,Address address) {
+		super();
+		this.empid = empid;
+		this.ename = ename;
 		this.email = email;
 		this.phone = phone;
 		this.username = username;
 		this.password = password;
+		this.address=address;
 	}
-	public int getEmployeeId() {
-		return employeeId;
+
+	
+	public int getEmpid() {
+		return empid;
 	}
-	public void setEmployeeId(int employeeId) {
-		this.employeeId = employeeId;
+
+
+	public void setEmpid(int empid) {
+		this.empid = empid;
 	}
-	public String getEmployeeName() {
-		return employeeName;
+
+
+	public String getEname() {
+		return ename;
 	}
-	public void setEmployeeName(String employeeName) {
-		this.employeeName = employeeName;
+
+
+	public void setEname(String ename) {
+		this.ename = ename;
 	}
+
+
 	public String getEmail() {
 		return email;
 	}
@@ -79,6 +85,12 @@ public class Employee
 	}
 	public void setAddress(Address address) {
 		this.address = address;
+	}
+
+	@Override
+	public String toString() {
+		return "Employee [empid=" + empid + ", ename=" + ename + ", email=" + email + ", phone=" + phone + ", username="
+				+ username + ", password=" + password + ", address=" + address + "]";
 	}
 	
 	

@@ -6,8 +6,7 @@ import javax.persistence.*;
 public class Address 
 {
 	@Id
-	@Column(name="address_id")
-	private int addressId;
+	private int add_Id;
 	
 	private String city;
 	
@@ -19,19 +18,25 @@ public class Address
 	
 	
 	public Address() {}
-	public Address(int addressId, String city, String state, String pin, String landmark) {
-		this.addressId = addressId;
+	
+	public Address(int add_Id, String city, String state, String pin, String landmark) {
+		super();
+		this.add_Id = add_Id;
 		this.city = city;
 		this.state = state;
 		this.pin = pin;
 		this.landmark = landmark;
 	}
-	public int getAddressId() {
-		return addressId;
+	
+	
+	public int getAdd_Id() {
+		return add_Id;
 	}
-	public void setAddressId(int addressId) {
-		this.addressId = addressId;
+
+	public void setAdd_Id(int add_Id) {
+		this.add_Id = add_Id;
 	}
+
 	public String getCity() {
 		return city;
 	}
@@ -55,6 +60,12 @@ public class Address
 	}
 	public void setLandmark(String landmark) {
 		this.landmark = landmark;
+	}
+
+	@Override
+	public String toString() {
+		return "Address [add_Id=" + add_Id + ", city=" + city + ", state=" + state + ", pin=" + pin + ", landmark="
+				+ landmark + "]";
 	}
 	
 

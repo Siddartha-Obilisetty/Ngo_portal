@@ -9,16 +9,12 @@ import org.hibernate.annotations.Type;
 public class Donation 
 {
 	@Id
-	@Column(name="donation_id")
-	private int donationId;
-		
-	@Column(name="donation_amount")
-	private double donationAmount;
+	private int donation_id;
 	
-	@Column(name="donation_date")
-	private Date donationDate;
+	private double donation_amount;
 	
-
+	private Date donation_date;
+	
 	@OneToOne
 	@JoinColumn(name = "item_id")
 	private DonationItem item;
@@ -29,20 +25,40 @@ public class Donation
 	
 	public Donation() {}
 	
-	public Donation(int donationId, Donor donor, DonationItem item, double donationAmount, Date donationDate) {
-		this.donationId = donationId;
+	public Donation(int donation_id, double donation_amount, Date donation_date, DonationItem item, Donor donor) {
+		super();
+		this.donation_id = donation_id;
+		this.donation_amount = donation_amount;
+		this.donation_date = donation_date;
 		this.item = item;
-		this.donationAmount = donationAmount;
-		this.donationDate = donationDate;
 		this.donor = donor;
+	}
 
+	public int getDonation_id() {
+		return donation_id;
 	}
-	public int getDonationId() {
-		return donationId;
+
+	public void setDonation_id(int donation_id) {
+		this.donation_id = donation_id;
 	}
-	public void setDonationId(int donationId) {
-		this.donationId = donationId;
+
+	public Date getDonation_date() {
+		return donation_date;
 	}
+
+	public void setDonation_date(Date donation_date) {
+		this.donation_date = donation_date;
+	}
+	
+	
+	public double getDonation_amount() {
+		return donation_amount;
+	}
+
+	public void setDonatio_amount(double donation_amount) {
+		this.donation_amount = donation_amount;
+	}
+
 	public Donor getDonor() {
 		return donor;
 	}
@@ -54,18 +70,6 @@ public class Donation
 	}
 	public void setItem(DonationItem item) {
 		this.item = item;
-	}
-	public double getDonationAmount() {
-		return donationAmount;
-	}
-	public void setDonationAmount(double donationAmount) {
-		this.donationAmount = donationAmount;
-	}
-	public Date getDonationDate() {
-		return donationDate;
-	}
-	public void setDonationDate(Date donationDate) {
-		this.donationDate = donationDate;
 	}
 	
 	

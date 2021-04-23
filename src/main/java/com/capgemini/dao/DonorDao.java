@@ -23,11 +23,11 @@ public interface DonorDao extends JpaRepository<Donor, Integer>
 	
 	//public Donation donateToNGO(Donation donation);
 	
-	@Query(value="select donor_password from donor where donor_username=:username",nativeQuery = true)
+	@Query(value="select d.password from Donor d where d.username=:username")
 	public String forgotPassword(@Param("username")String username);
 	
 	@Modifying
-	@Query(value="update donor set donor_password=:newPassword where donor_username=:username",nativeQuery = true)
+	@Query(value="update Donor d set d.password=:newPassword where d.username=:username")
 	public String resetPassword(@Param("username")String username,@Param("newPassword")String newPassword);
 
 }

@@ -29,9 +29,9 @@ public class NeedyPeopleServiceImpl implements NeedyPeopleService
 	@Transactional
 	@Override
 	public boolean registerNeedyPerson(NeedyPeople person) throws DuplicateNeedyPeopleException {
-		Optional<NeedyPeople> np = needyPeople.findById(person.getNeedyPersonid());
+		Optional<NeedyPeople> np = needyPeople.findById(person.getNp_id());
 		if(np.isPresent()) {
-			throw new DuplicateNeedyPeopleException(person.getNeedyPersonid());
+			throw new DuplicateNeedyPeopleException(person.getNp_id());
 		}
 		return needyPeople.createNeedyPerson(person);
 	}
@@ -39,9 +39,9 @@ public class NeedyPeopleServiceImpl implements NeedyPeopleService
 	@Transactional
 	@Override
 	public boolean login(NeedyPeople person) throws NoSuchNeedyPeopleException {
-		Optional<NeedyPeople> np = needyPeople.findById(person.getNeedyPersonid());
+		Optional<NeedyPeople> np = needyPeople.findById(person.getNp_id());
 		if(np.isPresent()) {
-			throw new NoSuchNeedyPeopleException(person.getNeedyPersonid());
+			throw new NoSuchNeedyPeopleException(person.getNp_id());
 		}
 		return true;/*needyPeople.readLoginData(person);*/
 	}

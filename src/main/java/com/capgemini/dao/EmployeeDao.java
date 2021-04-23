@@ -21,11 +21,11 @@ public interface EmployeeDao extends JpaRepository<Employee, Integer>
 	public boolean createNeedyPerson(@Param("person") NeedyPeople person);
 	
 	@Modifying
-	@Query(value="delete from needypeople wher np_id=?1",nativeQuery = true)
+	@Query(value="delete from needypeople where np_id=?1",nativeQuery = true)
 	public boolean deleteNeedyPerson(int needyPersonId);
 	
-	@Query(value="select p from NeedyPeople p where np_id=?1")
-	public NeedyPeople readNeedyPeopleById(int id);
+	@Query(value="select p from NeedyPeople p where np_id=:npid")
+	public NeedyPeople readNeedyPeopleById(@Param("npid")int id);
 	
 	@Query(value="select p from NeedyPeople p where np_name=?1")
 	public List<NeedyPeople> readNeedyPeopleByName(String name);
