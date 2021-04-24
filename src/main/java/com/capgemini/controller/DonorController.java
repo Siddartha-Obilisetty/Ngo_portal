@@ -12,6 +12,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.capgemini.exception.DuplicateDonorException;
+import com.capgemini.exception.NoSuchNeedyPeopleException;
+import com.capgemini.exception.WrongPasswordException;
+import com.capgemini.model.Donation;
 import com.capgemini.model.Donor;
 import com.capgemini.service.DonorService;
 
@@ -26,7 +29,21 @@ public class DonorController
 		this.donorService = donorService;
 	}
 	
-	//donate to ngo,login
+	@PutMapping(value="/donate")
+	public ResponseEntity<String> donateToNGO(@RequestBody Donation donation) {
+		donorService.donateToNGO(donation);
+		String s="Thank You!!";
+		return new ResponseEntity<String>(s,HttpStatus.OK);
+	}
+	
+	@GetMapping(value="/login")
+	public ResponseEntity<HttpStatus> login(@RequestParam String username,@RequestParam String password) throws NoSuchNeedyPeopleException, WrongPasswordException {
+		if(donorService.login(username,password))
+			return new ResponseEntity<HttpStatus>(HttpStatus.OK);
+		else 
+        	return new ResponseEntity<HttpStatus>(HttpStatus.BAD_REQUEST);
+	}
+	
 	
 	@PostMapping(value="/register",consumes = "application/json")
 	public ResponseEntity<HttpStatus> registerDonor(@RequestBody Donor donor) throws DuplicateDonorException

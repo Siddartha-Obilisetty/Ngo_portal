@@ -10,9 +10,12 @@ import org.springframework.transaction.annotation.Transactional;
 import com.capgemini.dao.DonorDao;
 import com.capgemini.exception.DuplicateDonorException;
 import com.capgemini.exception.NoSuchDonorException;
+import com.capgemini.exception.NoSuchNeedyPeopleException;
+import com.capgemini.exception.WrongPasswordException;
 import com.capgemini.model.Address;
 import com.capgemini.model.Donation;
 import com.capgemini.model.Donor;
+import com.capgemini.model.NeedyPeople;
 import com.capgemini.service.DonorService;
 
 @Service
@@ -21,18 +24,24 @@ public class DonorServiceImpl implements DonorService
 	@Autowired
 	DonorDao donorDao;
 	
-	//not completed
+	
 	@Transactional
 	@Override
-	public boolean login(Donor donor) throws NoSuchDonorException {
-			Optional<Donor> d = donorDao.findById(donor.getDonor_id());
-			if(d.isPresent()) {
-				return false;/*donorDao.login(donor)*/	
-			}
-			else {
-				throw new NoSuchDonorException(donor.getDonor_id());
-			}
+	public boolean login(String username, String password) throws NoSuchNeedyPeopleException, WrongPasswordException {
+		Optional<Donor> d = donorDao.findByUsername(username);
+		if(d.isPresent()) {
+			Donor donor=d.get();
+			if(donor.getPassword().equals(donorDao.login(username)))
+				return true;
+			else
+				throw new WrongPasswordException();
+		}
+		else {
+			throw new NoSuchNeedyPeopleException(username);
+		}
+		
 	}
+	
 	
 	@Transactional(readOnly = true)
 	@Override
@@ -46,7 +55,7 @@ public class DonorServiceImpl implements DonorService
 	@Override
 	public String resetPassword(String username,String oldPassword,String newPassword) {
 		Donor d=donorDao.findDonorByDonorUsername(username);
-		if(d.getPassword()==oldPassword)
+		if(d.getPassword().equals(oldPassword))
 		{
 			donorDao.resetPassword(username,newPassword);
 			return "Your password has been Changed";
@@ -76,8 +85,8 @@ public class DonorServiceImpl implements DonorService
 				throw new DuplicateDonorException(donor.getDonor_id());
 			}
 			else {
-				this.addAddress(d.getAddress());
-				donorDao.createDonor(d.getDonor_id(), d.getDonor_name(), d.getEmail(), d.getPhone(), d.getUsername(), d.getPassword(), d.getAddress().getAdd_Id());
+				this.addAddress(donor.getAddress());
+				donorDao.createDonor(donor.getDonor_id(), donor.getDonor_name(), donor.getEmail(), donor.getPhone(), donor.getUsername(), donor.getPassword(), donor.getAddress().getAdd_Id());
 				return true;
 			}
 		}
@@ -89,7 +98,8 @@ public class DonorServiceImpl implements DonorService
 
 	@Transactional
 	@Override
-	public Donation donateToNGO(Donation donation) {
+	public int donateToNGO(Donation donation) {
+		donorDao.addDonation(donation.getDonation_id(),donation.getDonation_amount(),donation.getItem().getItem_id());
 		sendThankyouMailToDonator(donation.getDonor());
 		return donorDao.donateToNGO(donation);
 	}
@@ -99,7 +109,7 @@ public class DonorServiceImpl implements DonorService
 	@Transactional
 	@Override
 	public void sendThankyouMailToDonator(Donor donor) {
-		System.out.println("Thank you mail sent to "+donor.getEmail());
+		System.out.println("Thank you mail sent ");
 	}
 	
 

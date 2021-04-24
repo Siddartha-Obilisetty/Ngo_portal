@@ -8,8 +8,8 @@ import com.capgemini.model.Donor;
 public interface DonorService 
 {
 	public boolean registerDonor(Donor donor) throws DuplicateDonorException;
-	public boolean login(Donor donor) throws NoSuchDonorException;
-	public Donation donateToNGO(Donation donation);
+	public 	boolean login(String username, String password) throws NoSuchNeedyPeopleException, WrongPasswordException;
+	public int donateToNGO(Donation donation);
 	public void sendThankyouMailToDonator(Donor donor);
 	public String forgotPassword(String username);
 	public String resetPassword(String username, String oldPassword, String newPassword);

@@ -13,8 +13,8 @@ public class NoSuchNeedyPeopleException extends Exception {
 	@Override
 	public String getMessage() {
 		if(needyPersonid!=0)
-			return "The Person with Id "+needyPersonid+" doesn't exists!";
+			return "The NeedyPerson with Id "+needyPersonid+" doesn't exists!";
 		else
-			return "The Donor with Name "+name+" doesn't exists!";
+			return "The NeedyPeople with Name "+name+" doesn't exists!";
 	}
 }

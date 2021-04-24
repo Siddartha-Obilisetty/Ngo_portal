@@ -2,6 +2,8 @@ package com.capgemini.model;
 
 import javax.persistence.*;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
 @Entity
 public class DonationBox 
 {
@@ -12,7 +14,7 @@ public class DonationBox
 	
 	private String acc_no="xxxxxxxxxxxx2021";
 	
-	private double total_collection=10000.0;
+	private double total_money_collection=10000.0;
 	
 	private double total_books_collection=0L;
 	
@@ -26,13 +28,13 @@ public class DonationBox
 	public DonationBox() {}
 
 	
-	public DonationBox(String ngo_name, String reg_no, String acc_no, double total_collection,
+	public DonationBox(String ngo_name, String reg_no, String acc_no, double total_money_collection,
 			double total_books_collection, double total_clothes_collection, double total_edible_collection,
 			double total_other_collection) {
 		this.ngo_name = ngo_name;
 		this.reg_no = reg_no;
 		this.acc_no = acc_no;
-		this.total_collection = total_collection;
+		this.total_money_collection = total_money_collection;
 		this.total_books_collection = total_books_collection;
 		this.total_clothes_collection = total_clothes_collection;
 		this.total_edible_collection = total_edible_collection;
@@ -63,12 +65,12 @@ public class DonationBox
 		this.acc_no = acc_no;
 	}
 
-	public double getTotal_collection() {
-		return total_collection;
+	public double getTotal_money_collection() {
+		return total_money_collection;
 	}
 
-	public void setTotal_collection(double total_collection) {
-		this.total_collection = total_collection;
+	public void setTotal_collection(double total_money_collection) {
+		this.total_money_collection = total_money_collection;
 	}
 
 

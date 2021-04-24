@@ -5,6 +5,7 @@ import javax.persistence.*;
 import org.hibernate.annotations.Type;
 
 @Entity
+@Table(name="needy_people")
 public class NeedyPeople 
 {
 	@Id
@@ -16,27 +17,37 @@ public class NeedyPeople
 	
 	private double family_income;
 	
+	private String username;
+	
+	private String password;
+	
 	@Enumerated(EnumType.STRING)
 	@Type(type = "com.capgemini.model.DonationType")
 	private DonationType donationType;
 	
 	@OneToOne
-	@JoinColumn(name = "address_id")
+	@JoinColumn(name = "add_Id")
 	private Address address;
 	
 	public NeedyPeople() {}
 	
 	
-	public NeedyPeople(int np_id, String np_name, String phone, double family_income, DonationType donationType,
-			Address address) {
+
+
+	public NeedyPeople(int np_id, String np_name, String phone, double family_income, String username, String password,
+			DonationType donationType, Address address) {
 		super();
 		this.np_id = np_id;
 		this.np_name = np_name;
 		this.phone = phone;
 		this.family_income = family_income;
+		this.username = username;
+		this.password = password;
 		this.donationType = donationType;
 		this.address = address;
 	}
+
+
 
 
 	public int getNp_id() {
@@ -93,6 +104,34 @@ public class NeedyPeople
 	}
 	public void setAddress(Address address) {
 		this.address = address;
+	}
+
+
+
+
+	public String getUsername() {
+		return username;
+	}
+
+
+
+
+	public void setUsername(String username) {
+		this.username = username;
+	}
+
+
+
+
+	public String getPassword() {
+		return password;
+	}
+
+
+
+
+	public void setPassword(String password) {
+		this.password = password;
 	}
 	
 }

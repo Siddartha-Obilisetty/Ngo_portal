@@ -8,6 +8,8 @@ import org.hibernate.annotations.Type;
 public class DonationItem 
 {
 	@Id
+	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator = "id_Sequence")
+	@SequenceGenerator(name = "id_Sequence", sequenceName = "ID_SEQ")
 	private int item_id;
 	
 	private String item_desc;

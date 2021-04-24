@@ -12,10 +12,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.capgemini.exception.DuplicateEmployeeException;
 import com.capgemini.exception.NoSuchEmployeeException;
+import com.capgemini.model.DonationDistribution;
+import com.capgemini.model.DonationDistributionStatus;
 import com.capgemini.model.Employee;
 import com.capgemini.service.AdminService;
 
@@ -29,7 +32,11 @@ public class AdminController
 		this.adminService = adminService;
 	}
 	
-	//approveDonation
+	@PutMapping(value="/approveDonation")
+	public ResponseEntity<HttpStatus> approveDonation(@RequestBody DonationDistribution distribution) {
+		adminService.approveDonation(distribution);
+		return new ResponseEntity<HttpStatus>(HttpStatus.OK);
+	}
 	
 	@PostMapping(value="/employee/add",consumes = "application/json")
 	public ResponseEntity<HttpStatus> addEmployee(@RequestBody Employee employee) throws DuplicateEmployeeException

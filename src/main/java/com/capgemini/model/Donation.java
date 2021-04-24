@@ -15,6 +15,7 @@ public class Donation
 	
 	private Date donation_date;
 	
+	
 	@OneToOne
 	@JoinColumn(name = "item_id")
 	private DonationItem item;

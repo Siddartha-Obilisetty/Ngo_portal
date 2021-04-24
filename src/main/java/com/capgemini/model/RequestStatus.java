@@ -6,10 +6,10 @@ import javax.persistence.*;
 public class RequestStatus 
 {
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator = "id_Sequence")
+	@SequenceGenerator(name = "id_Sequence", sequenceName = "ID_SEQ")
+	private int id;
 	
-	private boolean status;
 	
 	@OneToOne
 	@JoinColumn(name="np_id")
@@ -17,27 +17,18 @@ public class RequestStatus
 
 	public RequestStatus() {}
 
-	public RequestStatus(Long id, boolean status, NeedyPeople np) {
-		this.id = id;
-		this.status = status;
+	public RequestStatus(NeedyPeople np) {
 		this.np = np;
 	}
 
-	public Long getId() {
+	public int getId() {
 		return id;
 	}
 
-	public void setId(Long id) {
+	public void setId(int id) {
 		this.id = id;
 	}
 
-	public boolean isStatus() {
-		return status;
-	}
-
-	public void setStatus(boolean status) {
-		this.status = status;
-	}
 
 	public NeedyPeople getNp() {
 		return np;

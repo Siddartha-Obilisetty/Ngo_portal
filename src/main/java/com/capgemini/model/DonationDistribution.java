@@ -1,6 +1,6 @@
 package com.capgemini.model;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 import javax.persistence.*;
 
@@ -10,13 +10,15 @@ import org.hibernate.annotations.Type;
 public class DonationDistribution 
 {
 	@Id
+	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator = "id_Sequence")
+	@SequenceGenerator(name = "id_Sequence", sequenceName = "ID_SEQ")
 	private int distributionid;
 	
 	private double amt_distributed;
 	
-	private Date dod;
+	private LocalDate dod;
 	
-	private Date app_or_rej_date;
+	private LocalDate app_or_rej_date;
 	
 	@Enumerated(EnumType.STRING)
 	@Type(type = "com.capgemini.model.DonationDistributionStatus")
@@ -40,7 +42,7 @@ public class DonationDistribution
 	public DonationDistribution() {}
 	
 
-	public DonationDistribution(int distributionid, double amt_distributed, Date dod, Date app_or_rej_date,
+	public DonationDistribution(int distributionid, double amt_distributed, LocalDate dod, LocalDate app_or_rej_date,
 			DonationDistributionStatus status, NeedyPeople needyPeople, DonationItem donationItem, Employee employee) {
 		super();
 		this.distributionid = distributionid;
@@ -74,22 +76,22 @@ public class DonationDistribution
 	}
 
 
-	public Date getDod() {
+	public LocalDate getDod() {
 		return dod;
 	}
 
 
-	public void setDod(Date dod) {
+	public void setDod(LocalDate dod) {
 		this.dod = dod;
 	}
 
 
-	public Date getApp_or_rej_date() {
+	public LocalDate getApp_or_rej_date() {
 		return app_or_rej_date;
 	}
 
 
-	public void setApp_or_rej_date(Date app_or_rej_date) {
+	public void setApp_or_rej_date(LocalDate app_or_rej_date) {
 		this.app_or_rej_date = app_or_rej_date;
 	}
 

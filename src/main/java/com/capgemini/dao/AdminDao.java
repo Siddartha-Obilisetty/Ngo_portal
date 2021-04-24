@@ -13,12 +13,16 @@ import org.springframework.transaction.annotation.Transactional;
 import com.capgemini.model.Address;
 import com.capgemini.model.Admin;
 import com.capgemini.model.DonationDistribution;
+import com.capgemini.model.DonationDistributionStatus;
 import com.capgemini.model.Employee;
 
 @Repository
 public interface AdminDao extends JpaRepository<Admin, Integer>
 {	
-	//public boolean approveDonation(DonationDistribution distribution);
+
+	@Modifying
+	@Query(value="update DonationDistribution d set d.DonationDistributionStatus=:#{#dd.status},d.app_or_rej_date=:#{#dd.app_or_rej_date} where d.distributionid=:#{#dd.distributionid}",nativeQuery = true)
+	public boolean approveDonation(@Param("dd")DonationDistribution distribution);
 	
 	@Modifying
 	@Query(value="insert into Address (add_Id,city,state,pin,landmark) values(:add_Id,:city,:state,:pin,:landmark)",nativeQuery = true)

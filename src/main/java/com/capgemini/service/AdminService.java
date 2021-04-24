@@ -5,6 +5,7 @@ import java.util.List;
 import com.capgemini.exception.*;
 import com.capgemini.model.Address;
 import com.capgemini.model.DonationDistribution;
+import com.capgemini.model.DonationDistributionStatus;
 import com.capgemini.model.Employee;
 
 public interface AdminService 
@@ -15,7 +16,7 @@ public interface AdminService
 	public Employee findEmployeeById(int employeeId) throws NoSuchEmployeeException;
 	public List<Employee> findEmployeeByName(String name) throws NoSuchEmployeeException;
 	public List<Employee> findAllEmployee();
-	public boolean approveDonation(DonationDistribution distribution);
+	public DonationDistributionStatus approveDonation(DonationDistribution distribution);
 	public void addAddress(Address address);
 	public boolean removeAddress(int add_Id);
 }

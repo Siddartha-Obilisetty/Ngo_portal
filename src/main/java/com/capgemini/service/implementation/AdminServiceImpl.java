@@ -4,12 +4,15 @@ import com.capgemini.exception.DuplicateEmployeeException;
 import com.capgemini.exception.NoSuchEmployeeException;
 import com.capgemini.model.Address;
 import com.capgemini.model.DonationDistribution;
+import com.capgemini.model.DonationDistributionStatus;
 import com.capgemini.model.Employee;
 import com.capgemini.service.AdminService;
 
 import java.awt.Label;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,13 +25,21 @@ public class AdminServiceImpl implements AdminService
 	@Autowired
 	AdminDao admin;
 
-	//not finished
-			@Transactional
-			@Override
-			public boolean approveDonation(DonationDistribution distribution) {
-				// TODO Auto-generated method stub
-				return false;
-			}
+	@Transactional
+	@Override
+	public DonationDistributionStatus approveDonation(DonationDistribution distribution) {
+		LocalDate d = LocalDate.now();
+		if(distribution.getNeedyPeople().getFamily_income()<200000) {
+			distribution.setStatus(DonationDistributionStatus.APPROVED);
+			distribution.setApp_or_rej_date(d);
+			return DonationDistributionStatus.APPROVED;
+		}
+		else {
+			distribution.setStatus(DonationDistributionStatus.REJECTED);
+			distribution.setApp_or_rej_date(d);
+			return DonationDistributionStatus.REJECTED;
+		}
+	}
 	
 	@Transactional
 	@Override

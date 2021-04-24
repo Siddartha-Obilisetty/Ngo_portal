@@ -38,6 +38,11 @@ public class GlobalExceptionHandler
 	public ResponseEntity<String> exceptionHandlerMethod(NoSuchEmployeeException ex) {
 		return new ResponseEntity<String>(ex.getMessage(),HttpStatus.NOT_FOUND);
 	}
+	
+	@ExceptionHandler(WrongPasswordException.class)
+	public ResponseEntity<String> exceptionHandlerMethod(WrongPasswordException ex) {
+		return new ResponseEntity<String>(ex.getMessage(),HttpStatus.NOT_ACCEPTABLE);
+	}
 }
 
 
