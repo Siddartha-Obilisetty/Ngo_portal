@@ -1,5 +1,7 @@
 package com.capgemini.dao;
 
+//imports
+
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.Date;
@@ -9,46 +11,67 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.capgemini.model.Address;
 import com.capgemini.model.Donation;
 import com.capgemini.model.DonationItem;
 import com.capgemini.model.Donor;
 
+//Repository Class
+
+@Repository
 public interface DonorDao extends JpaRepository<Donor, Integer>
 {
-	public Optional<Donor> findByUsername(String username);
-	
+	//creating donor
 	@Modifying
-	@Query(value="update Donation_Box d set d.total_money_collection=d.total_money_collection+:#{#donation.getDonation_amount()}",nativeQuery = true)
-	public int donateToNGO(Donation donation);
-
+	@Query(value="insert into Donor (donor_id,donor_name,email,phone,username,password,add_Id) values"+
+			"(:#{#donor.getDonorId()},:#{#donor.getDonorName()},:#{#donor.getEmail()},:#{#donor.getPhone()},"+
+			":#{#donor.getUsername()},:#{#donor.getPassword()},:#{#donor.getAddress()})",nativeQuery = true)
+	public int createDonor(@Param("donor")Donor donor) throws SQLException;
+	
+	//adding address
+	@Modifying
+	@Query(value="insert into Address (address_id,city,state,pin,landmark) values(:#{#add.getAddressId()},"
+			+ ":#{#add.getCity()},:#{#add.getState()},:#{#add.getPin()},:#{#add.getLandmark()})",nativeQuery = true)
+	public int addAddress(@Param("add")Address address)throws SQLException;
+	
+	//login
 	@Query(value="select d.password from Donor d where d.username=?1")
 	public String login(String username);
 	
-	
-	@Modifying
-	@Query(value="insert into Address (add_Id,city,state,pin,landmark) values(:add_Id,:city,:state,:pin,:landmark)",nativeQuery = true)
-	public int addAddress(@Param("add_Id")int add_Id,@Param("city")String city,@Param("state")String state,@Param("pin")String pin,@Param("landmark")String landmark)throws SQLException;
-	
-	@Modifying
-	@Query(value="insert into Donor (donor_id,donor_name,email,phone,username,password,add_Id) values(:donor_id,:donor_name,:email,:phone,:username,:password,:add_id)",nativeQuery = true)
-	public int createDonor(@Param("donor_id")int donor_id,@Param("donor_name")String donor_name,@Param("email")String email,@Param("phone")String phone,@Param("username")String username,@Param("password")String password,@Param("add_id")int add_id) throws SQLException;
-	
+	//updating old password with new password	
 	@Modifying
 	@Query(value="update Donor d set d.password=:newPassword where d.username=:username")
 	public int resetPassword(@Param("username")String username,@Param("newPassword")String newPassword);
 
-
+	//Retrieving old password
 	@Query(value="select d.password from Donor d where d.username=:username")
 	public String forgotPassword(@Param("username")String username);
 	
-	
-	@Query(value="select d from Donor d where d.username=?1")
-	public Donor findDonorByDonorUsername(String username);
+	//updating donation box with the donation amount
+	@Modifying
+	@Query(value="update DonationBox d set d.totalMoneyCollection=d.totalMoneyCollection+:#{#donation.getDonation_amount()}")
+	public int donateToNGO(@Param("donation")Donation donation);
 
-	@Query(value="insert into Donation (donation_id,donation_amount,item_id) values(?1,?2,?3)",nativeQuery = true)
-	public int addDonation(int donation_id, double donation_amount, Long item_id);
 	
+	//adding donation data to donation table
+	@Query(value="insert into Donation (donation_id,donation_amount,donation_date,item_id,donor_id) values"+
+			"(:#{#donation.getDonationId()},:#{#donation.getDonation_amount()},:#{#donation.getDonationDate()},"
+			+":#{#donation.getItem().getItemId()},:#{#donation.getDonor().getDonorId()})",nativeQuery = true)
+	public int addDonation(@Param("donation")Donation donation);
+	
+
+	//adding data to DonationItem table
+	@Modifying
+	@Query(value="insert into Donation_Item (item_id,item_description,type) values (:#{#item.getItemId()},"+
+			":#{#item.getItemDescription()},:#{#item.getType()})",nativeQuery = true)
+	public int addDonationItem(@Param("item")DonationItem item);
+	
+	
+	//Extracting Donor data using user name
+	@Query(value="select d from Donor d where d.username=?1")
+	public Optional<Donor> findByUsername(String username);
 	
 }

@@ -1,5 +1,7 @@
 package com.capgemini.controller;
 
+//imports
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,10 +15,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.capgemini.exception.DuplicateDonorException;
 import com.capgemini.exception.NoSuchNeedyPeopleException;
-import com.capgemini.exception.WrongPasswordException;
+import com.capgemini.exception.WrongCredentialsException;
 import com.capgemini.model.Donation;
 import com.capgemini.model.Donor;
 import com.capgemini.service.DonorService;
+
+//Donor Controller class
 
 @RestController
 @RequestMapping("/donor")
@@ -29,40 +33,55 @@ public class DonorController
 		this.donorService = donorService;
 	}
 	
-	@PutMapping(value="/donate")
-	public ResponseEntity<String> donateToNGO(@RequestBody Donation donation) {
-		donorService.donateToNGO(donation);
-		String s="Thank You!!";
-		return new ResponseEntity<String>(s,HttpStatus.OK);
-	}
-	
-	@GetMapping(value="/login")
-	public ResponseEntity<HttpStatus> login(@RequestParam String username,@RequestParam String password) throws NoSuchNeedyPeopleException, WrongPasswordException {
-		if(donorService.login(username,password))
-			return new ResponseEntity<HttpStatus>(HttpStatus.OK);
-		else 
-        	return new ResponseEntity<HttpStatus>(HttpStatus.BAD_REQUEST);
-	}
-	
-	
+	//register
 	@PostMapping(value="/register",consumes = "application/json")
 	public ResponseEntity<HttpStatus> registerDonor(@RequestBody Donor donor) throws DuplicateDonorException
 	{
-		donorService.registerDonor(donor);
-		return new ResponseEntity<HttpStatus>(HttpStatus.OK);
+		if(donorService.registerDonor(donor))
+			return new ResponseEntity<HttpStatus>(HttpStatus.OK);
+		else 
+        	return new ResponseEntity<HttpStatus>(HttpStatus.NOT_FOUND);
 	}
 	
+	//login
+	@GetMapping(value="/login")
+	public ResponseEntity<HttpStatus> login(@RequestParam String username,@RequestParam String password) throws NoSuchNeedyPeopleException, WrongCredentialsException {
+		if(donorService.login(username,password))
+			return new ResponseEntity<HttpStatus>(HttpStatus.OK);
+		else 
+        	return new ResponseEntity<HttpStatus>(HttpStatus.NOT_ACCEPTABLE);
+	}
+	
+	//Donate to NGO
+	@PutMapping(value="/donate")
+	public ResponseEntity<String> donateToNGO(@RequestBody Donation donation) {
+		if(donorService.donateToNGO(donation))
+		{
+			String s="Thank You!!";
+			return new ResponseEntity<String>(s,HttpStatus.OK);
+		}
+		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+	}
+	
+	//Reset password
 	@PutMapping(value="/reset_password",consumes = "application/json")
-	public ResponseEntity<String> resetPassword(@RequestParam String username,@RequestParam String oldPassword,@RequestParam String newPassword)
+	public ResponseEntity<String> resetPassword(@RequestParam String username,@RequestParam String oldPassword,@RequestParam String newPassword) throws WrongCredentialsException
 	{
 		String message=donorService.resetPassword(username,oldPassword,newPassword);
-		return new ResponseEntity<String>(message,HttpStatus.OK);
+		if(message!=null)
+			return new ResponseEntity<String>(message,HttpStatus.OK);
+		else
+			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 	}
 	
+	//Forgot password
 	@GetMapping(value="/forgot_password",produces = "application/json")
-	public ResponseEntity<String> forgotPassword(@RequestParam String username)
+	public ResponseEntity<String> forgotPassword(@RequestParam String username) throws WrongCredentialsException
 	{
 		String message=donorService.forgotPassword(username);
-		return new ResponseEntity<String>(message,HttpStatus.OK);
+		if(message!=null)
+			return new ResponseEntity<String>(message,HttpStatus.OK);
+		else
+			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 	}
 }

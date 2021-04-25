@@ -1,18 +1,22 @@
 package com.capgemini.service;
 
+//imports
+
 import com.capgemini.exception.*;
 import com.capgemini.model.Address;
 import com.capgemini.model.Donation;
 import com.capgemini.model.Donor;
 
+//Service interface
 public interface DonorService 
 {
+	//methods to be implemented
 	public boolean registerDonor(Donor donor) throws DuplicateDonorException;
-	public 	boolean login(String username, String password) throws NoSuchNeedyPeopleException, WrongPasswordException;
-	public int donateToNGO(Donation donation);
-	public void sendThankyouMailToDonator(Donor donor);
-	public String forgotPassword(String username);
-	public String resetPassword(String username, String oldPassword, String newPassword);
+	public 	boolean login(String username, String password) throws NoSuchNeedyPeopleException, WrongCredentialsException;
+	public boolean donateToNGO(Donation donation);
+	public void sendThankyouMailToDonator(String email);
+	public String forgotPassword(String username) throws WrongCredentialsException;
+	public String resetPassword(String username, String oldPassword, String newPassword) throws WrongCredentialsException;
 	public void emailPasswordToDonor(String email,String password);
-	public void addAddress(Address a);
+	public boolean addAddress(Address a);
 }

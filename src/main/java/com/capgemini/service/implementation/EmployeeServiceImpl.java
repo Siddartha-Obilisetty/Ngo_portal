@@ -1,5 +1,7 @@
 package com.capgemini.service.implementation;
 
+//imports
+
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.List;
@@ -13,7 +15,7 @@ import com.capgemini.dao.EmployeeDao;
 import com.capgemini.exception.DuplicateNeedyPeopleException;
 import com.capgemini.exception.NoSuchEmployeeException;
 import com.capgemini.exception.NoSuchNeedyPeopleException;
-import com.capgemini.exception.WrongPasswordException;
+import com.capgemini.exception.WrongCredentialsException;
 import com.capgemini.model.Address;
 import com.capgemini.model.DonationDistribution;
 import com.capgemini.model.DonationDistributionStatus;
@@ -21,6 +23,7 @@ import com.capgemini.model.Employee;
 import com.capgemini.model.NeedyPeople;
 import com.capgemini.service.EmployeeService;
 
+//Service implementation class
 
 @Service
 public class EmployeeServiceImpl implements EmployeeService
@@ -28,45 +31,25 @@ public class EmployeeServiceImpl implements EmployeeService
 	@Autowired
 	EmployeeDao employeeDao;
 	
-	
-
-	@Override
-	@Transactional
-	public String helpNeedyPerson(int np_id) {
-		DonationDistribution dd = employeeDao.getDonationDistritionByNp_id(np_id);
-		if(dd.getStatus()==DonationDistributionStatus.APPROVED)
-		{
-			dd.setDateOfDistribution(LocalDate.now());
-			employeeDao.helpNeedyPerson(dd);
-			return "Approved and Amount Deducted";
-		}
-		else if(dd.getStatus()==DonationDistributionStatus.REJECTED)
-		{			
-			return "Rejected";
-		}
-		return "Pending";
+	public void setEmployeeDao(EmployeeDao employeeDao) {
+		this.employeeDao = employeeDao;
 	}
-	
-	
 
-	@Transactional
+	//login
+	@Transactional(readOnly = true)
 	@Override
-	public boolean login(String username, String password) throws NoSuchNeedyPeopleException, WrongPasswordException {
+	public boolean login(String username, String password) throws NoSuchNeedyPeopleException, WrongCredentialsException {
 		Optional<Employee> e = employeeDao.findByUsername(username);
-		if(e.isPresent()) {
-			Employee emp = e.get();
-			System.out.println(password+" "+employeeDao.login(username));
+		if(e.isPresent())
 			if(password.equals(employeeDao.login(username)))
 				return true;
 			else
-				throw new WrongPasswordException();
-		}
-		else {
-			throw new NoSuchNeedyPeopleException(username);
-		}
-		
+				throw new WrongCredentialsException();
+		else 
+			throw new NoSuchNeedyPeopleException(username);		
 	}
-	
+
+	//adding needy person
 	@Override
 	@Transactional
 	public boolean addNeedyPerson(NeedyPeople person) throws DuplicateNeedyPeopleException {
@@ -75,16 +58,34 @@ public class EmployeeServiceImpl implements EmployeeService
 			throw new DuplicateNeedyPeopleException(person.getNeedyPeopleId());
 		}
 		else {
-			addAddress(person.getAddress());
 			try {
-				employeeDao.createNeedyPerson(person.getNeedyPeopleId(), person.getNeedyPeopleName(), person.getPhone(), person.getFamilyIncome(),person.getUsername(),person.getPassword(),person.getType(), person.getAddress().getAddressId());
+				int i=0;
+				if(addAddress(person.getAddress()))
+					i=employeeDao.createNeedyPerson(person);
+				if(i!=0)
+					return true;
 			} catch (SQLException e) {
 				System.out.println(e.getMessage());
 			}
-			return true;
+			return false;
 		}
 	}
 	
+	//adding address
+	@Override
+	@Transactional
+	public boolean addAddress(Address a) {
+		try {
+			int i=employeeDao.addAddress(a);
+			if(i!=0)
+				return true;
+		} catch (SQLException e) {
+			System.out.println(e.getMessage());
+		}		
+		return false;
+	}
+
+	//removing needy person
 	@Override
 	@Transactional
 	public boolean removeNeedyPerson(int id) throws NoSuchNeedyPeopleException
@@ -92,28 +93,72 @@ public class EmployeeServiceImpl implements EmployeeService
 		try {
 			Optional<NeedyPeople> np = employeeDao.readNeedyPeopleById(id);
 			if(np.isPresent()) {
-				employeeDao.deleteNeedyPerson(id);
-				employeeDao.deleteAddress(np.get().getAddress().getAddressId());
-				return true;
+				int i=employeeDao.deleteNeedyPerson(id);
+				if(i!=0)
+					if(removeAddress(np.get().getAddress().getAddressId()))
+						return true;
 			}
 			else {
 				throw new NoSuchNeedyPeopleException(id);
 			}
-		} catch(SQLException ex) {
+		} 
+		catch(SQLException ex) {
 			System.out.println(ex.getMessage());
-		  }
+		}
 		return false;
 		
 	}
 	
-
+	//removing address
+	@Override
+	@Transactional
+	public boolean removeAddress(int add_Id) 
+	{
+		try {
+			int i=employeeDao.deleteAddress(add_Id);
+			if(i!=0)
+				return true;
+		} 
+		catch (SQLException e) {
+			System.out.println(e.getMessage());
+		}
+		return false;
+	}
+	
+	//help needy person
+	@Override
+	@Transactional
+	public String helpNeedyPerson(int np_id) {
+		DonationDistribution dd = employeeDao.getDonationDistritionByNp_id(np_id);
+		if(dd.getStatus().equals(DonationDistributionStatus.APPROVED))
+		{
+			dd.setDateOfDistribution(LocalDate.now());
+			int i=employeeDao.helpNeedyPerson(dd);
+			if(i!=0)
+				return "Approved and Amount Deducted";
+			return "Status not updated";
+		}
+		else if(dd.getStatus().equals(DonationDistributionStatus.REJECTED))
+		{			
+			return "Rejected";
+		}
+		return "Pending";
+	}
+	
+	
+	//finding needy people using id
 	@Override
 	@Transactional(readOnly = true)
-	public Optional<NeedyPeople> findNeedyPeopleById(int id) throws NoSuchNeedyPeopleException 
+	public NeedyPeople findNeedyPeopleById(int id) throws NoSuchNeedyPeopleException 
 	{
-		return employeeDao.readNeedyPeopleById(id);
+		Optional<NeedyPeople> np=employeeDao.readNeedyPeopleById(id);
+		if(np.isPresent())
+			return np.get();
+		else
+			throw  new NoSuchNeedyPeopleException(id);
 	}
 
+	//finding needy people using name
 	@Override
 	@Transactional(readOnly = true)
 	public List<NeedyPeople> findNeedyPeopleByName(String name) throws NoSuchNeedyPeopleException
@@ -121,38 +166,12 @@ public class EmployeeServiceImpl implements EmployeeService
 		return employeeDao.readNeedyPeopleByName(name);
 	}
 
+	//finding all needy people
 	@Override
 	@Transactional(readOnly = true)
 	public List<NeedyPeople> findAllNeedyPeople() 
 	{
 		return employeeDao.readAllNeedyPeople();
 	}
-
-	@Override
-	@Transactional
-	public void addAddress(Address a) {
-		System.out.println("in address method");
-		try {
-			employeeDao.addAddress(a.getAddressId(), a.getCity(), a.getState(), a.getPin(), a.getLandmark());
-		} catch (SQLException e) {
-			System.out.println(e.getMessage());
-		}		
-	}
-
-	@Override
-	@Transactional
-	public boolean removeAddress(int add_Id) {
-	try {
-		employeeDao.deleteAddress(add_Id);
-	} 
-	catch (SQLException e) {
-		System.out.println(e.getMessage());
-		return false;
-	}
-	return true;	
-	}
-
-
-
 	
 }

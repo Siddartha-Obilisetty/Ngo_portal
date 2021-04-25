@@ -2,12 +2,12 @@ package com.capgemini.exception;
 
 //Exception class
 
-public class WrongPasswordException extends Exception
+public class WrongCredentialsException extends Exception
 {
-	String message="Wrong Password";
+	String message="Wrong Credentials";
 	
 	//constructor
-	public WrongPasswordException() {}
+	public WrongCredentialsException() {}
 	
 	@Override
 	public String getMessage() {

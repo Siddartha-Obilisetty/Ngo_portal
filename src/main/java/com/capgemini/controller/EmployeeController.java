@@ -1,5 +1,7 @@
 package com.capgemini.controller;
 
+//imports
+
 import java.util.List;
 import java.util.Optional;
 
@@ -18,9 +20,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.capgemini.exception.DuplicateNeedyPeopleException;
 import com.capgemini.exception.NoSuchNeedyPeopleException;
-import com.capgemini.exception.WrongPasswordException;
+import com.capgemini.exception.WrongCredentialsException;
 import com.capgemini.model.NeedyPeople;
 import com.capgemini.service.EmployeeService;
+
+//Employee Controleer class
 
 @RestController
 @RequestMapping(value="/employee")
@@ -32,49 +36,60 @@ public class EmployeeController
 	public void setEmployeeService(EmployeeService employeeService) {
 		this.employeeService = employeeService;
 	}
+	
+	//login
+	@GetMapping(value="/login")
+	public ResponseEntity<HttpStatus> login(@RequestParam String username,@RequestParam String password) throws NoSuchNeedyPeopleException, WrongCredentialsException {
+		if(employeeService.login(username,password))
+			return new ResponseEntity<HttpStatus>(HttpStatus.OK);
+		else 
+        	return new ResponseEntity<HttpStatus>(HttpStatus.NOT_ACCEPTABLE);
+	}
+	
+	//Add Needy People
+	@PostMapping(value="/needypeople/add",produces="application/json")
+	public ResponseEntity<HttpStatus> addNeedyPerson(@RequestBody NeedyPeople n) throws DuplicateNeedyPeopleException
+	{	
+		if(employeeService.addNeedyPerson(n))
+			return new ResponseEntity<HttpStatus>(HttpStatus.OK);
+		else 
+        	return new ResponseEntity<HttpStatus>(HttpStatus.NOT_FOUND);
+	}
+	
+	//Deleting Needy People
+	@DeleteMapping(value = "/needypeople/delete/{np_id}", produces = "application/json")
+	public ResponseEntity<HttpStatus> deleteNeedyPerson(@PathVariable("np_id") int needyPersonId) throws NoSuchNeedyPeopleException 
+	{
+		if(employeeService.removeNeedyPerson(needyPersonId))
+			return new ResponseEntity<HttpStatus>(HttpStatus.OK);
+		else 
+        	return new ResponseEntity<HttpStatus>(HttpStatus.NOT_FOUND);
+	}
+	
+	//Help Needy People
 	@PutMapping(value="/helpNeedyPeople/{np_id}")
 	public ResponseEntity<String> helpNeedyPerson(@PathVariable("np_id")int np_id) {
 		String s=employeeService.helpNeedyPerson(np_id);
-		if(s!="")
+		if(s!=null)
 			return new ResponseEntity<String>(s,HttpStatus.OK);
 		else
 			return new ResponseEntity<String>(s,HttpStatus.NO_CONTENT);
 	}
 	
-	@GetMapping(value="/login")
-	public ResponseEntity<HttpStatus> login(@RequestParam String username,@RequestParam String password) throws NoSuchNeedyPeopleException, WrongPasswordException {
-		if(employeeService.login(username,password))
-			return new ResponseEntity<HttpStatus>(HttpStatus.OK);
-		else 
-        	return new ResponseEntity<HttpStatus>(HttpStatus.BAD_REQUEST);
-	}
-	
-	
-	@PostMapping(value="/needypeople/add",produces="application/json")
-	public ResponseEntity<HttpStatus> addNeedyPerson(@RequestBody NeedyPeople n) throws DuplicateNeedyPeopleException
-	{	
-		employeeService.addNeedyPerson(n);
-		return new ResponseEntity<HttpStatus>(HttpStatus.OK);
-	}
-	
+	//All Needy People
 	@GetMapping(value="/needypeople/all",produces="application/json")
 	public ResponseEntity<List<NeedyPeople>> getNeedyPeople(){
 		return new ResponseEntity<List<NeedyPeople>>(employeeService.findAllNeedyPeople(),HttpStatus.OK);
 	}
 	
+	//NeedyPeople by Id
 	@GetMapping(value = "/needypeople/getbyId/{np_id}", produces = "application/json")
 	public ResponseEntity<NeedyPeople> getNeedyPerson(@PathVariable("np_id") int needyPersonId)throws NoSuchNeedyPeopleException 
 	{
-		Optional<NeedyPeople> n = employeeService.findNeedyPeopleById(needyPersonId);
-		if (n.isPresent())
-			return new ResponseEntity<NeedyPeople>(n.get(), HttpStatus.OK);
-		else {
-			throw new NoSuchNeedyPeopleException(needyPersonId);
-			// return new ResponseEntity<Optional<NeedyPeople>>(n,HttpStatus.NO_CONTENT);
-		}
+		return new ResponseEntity<NeedyPeople>(employeeService.findNeedyPeopleById(needyPersonId),HttpStatus.OK);
 	}
 	
-
+	//NeedyPeople by Name
 	@GetMapping(value="/needypeople/getbyName/{np_name}",produces="application/json")
 	public ResponseEntity<List<NeedyPeople>>getNeedyPersonByName(@PathVariable("np_name") String np_name) throws NoSuchNeedyPeopleException
 	{ 
@@ -86,11 +101,5 @@ public class EmployeeController
 			throw new NoSuchNeedyPeopleException(np_name);
 	}
 	
-	@DeleteMapping(value = "/needypeople/delete/{np_id}", produces = "application/json")
-	public ResponseEntity<HttpStatus> deleteNeedyPerson(@PathVariable("np_id") int needyPersonId) throws NoSuchNeedyPeopleException 
-	{
-		employeeService.removeNeedyPerson(needyPersonId);
-		return new ResponseEntity<HttpStatus>(HttpStatus.OK);
-	}
 
 }

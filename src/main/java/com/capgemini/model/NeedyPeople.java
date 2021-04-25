@@ -28,11 +28,6 @@ public class NeedyPeople
 	
 	private String password;
 	
-	//enum class
-	@Enumerated(EnumType.STRING)
-	@Type(type = "com.capgemini.model.DonationType")
-	private DonationType type;
-	
 	private int request;
 	
 	//OneToOne Unidirectional Mapping
@@ -40,17 +35,15 @@ public class NeedyPeople
 	@JoinColumn(name = "address_id")
 	private Address address;
 	
-	public NeedyPeople() {}	//no parameter constructor
+	public NeedyPeople() {}		//no parameter constructor
 
 	//Parameterized constructor
-	
 	public NeedyPeople(int needyPeopleId, String needyPeopleName, String phone, double familyIncome, String username,
-			String password, DonationType type, int request, Address address) {
+			String password, int request, Address address) {
 		this.needyPeopleId = needyPeopleId;		this.needyPeopleName = needyPeopleName;
 		this.phone = phone;						this.familyIncome = familyIncome;
 		this.username = username;				this.password = password;
-		this.type = type;						this.request = request;
-		this.address = address;
+		this.request = request;					this.address = address;
 	}
 
 	//Getters and Setters
@@ -103,14 +96,6 @@ public class NeedyPeople
 		this.password = password;
 	}
 
-	public DonationType getType() {
-		return type;
-	}
-
-	public void setType(DonationType type) {
-		this.type = type;
-	}
-
 	public int getRequest() {
 		return request;
 	}
@@ -133,7 +118,7 @@ public class NeedyPeople
 	public String toString() {
 		return "NeedyPeople [needyPeopleId=" + needyPeopleId + ", needyPeopleName=" + needyPeopleName + ", phone="
 				+ phone + ", familyIncome=" + familyIncome + ", username=" + username + ", password=" + password
-				+ ", type=" + type + ", request=" + request + ", address=" + address + "]";
+				+ ", request=" + request + ", address=" + address + "]";
 	}
 	
 	

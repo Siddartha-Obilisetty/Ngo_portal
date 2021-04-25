@@ -1,6 +1,6 @@
 package com.capgemini.controller;
 
-import java.util.Optional;
+//imports
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -15,9 +15,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.capgemini.exception.DuplicateNeedyPeopleException;
 import com.capgemini.exception.NoSuchNeedyPeopleException;
-import com.capgemini.exception.WrongPasswordException;
+import com.capgemini.exception.WrongCredentialsException;
 import com.capgemini.model.NeedyPeople;
 import com.capgemini.service.NeedyPeopleService;
+
+//Needy people Controller class
 
 @RestController
 @RequestMapping("/needypeople")
@@ -26,21 +28,11 @@ public class NeedyPeopleController
 	@Autowired
 	NeedyPeopleService needyPeopleService;
 	
-	@GetMapping(value="/login")
-	public ResponseEntity<HttpStatus> login(@RequestParam String username,@RequestParam String password) throws NoSuchNeedyPeopleException, WrongPasswordException {
-		Optional<NeedyPeople> n = needyPeopleService.getByUsername(username);
-		System.out.println(n.get().getNeedyPeopleId());
-		if(n.isPresent()) {
-			if(n.get().getPassword().equals(needyPeopleService.login(username,password)))
-				return new ResponseEntity<HttpStatus>(HttpStatus.OK);
-			else
-				return new ResponseEntity<HttpStatus>(HttpStatus.BAD_REQUEST);
-		}
-		else {
-			throw new NoSuchNeedyPeopleException(username);
-		}
+	public void setNeedyPeopleService(NeedyPeopleService needyPeopleService) {
+		this.needyPeopleService = needyPeopleService;
 	}
-	
+
+	//register
 	@PostMapping(value="/register",consumes ="application/json")
     public ResponseEntity<HttpStatus> registerNeedyPerson(@RequestBody NeedyPeople person)  throws DuplicateNeedyPeopleException
     {
@@ -50,12 +42,22 @@ public class NeedyPeopleController
         	return new ResponseEntity<HttpStatus>(HttpStatus.BAD_REQUEST);
     }
 	
+	//login
+	@GetMapping(value="/login")
+	public ResponseEntity<HttpStatus> login(@RequestParam String username,@RequestParam String password) throws NoSuchNeedyPeopleException, WrongCredentialsException {
+		if(needyPeopleService.login(username, password))
+			return new ResponseEntity<HttpStatus>(HttpStatus.OK);
+		else 
+			return new ResponseEntity<HttpStatus>(HttpStatus.NOT_ACCEPTABLE);
+	}
+	
+	//request for help
 	@PutMapping(value="/request",consumes="application/json")
 	public ResponseEntity<HttpStatus> requestForHelp(@RequestParam int np_id) {
 		if(needyPeopleService.requestForHelp(np_id))
 			return new ResponseEntity<HttpStatus>(HttpStatus.OK);
 		else
-			return new ResponseEntity<HttpStatus>(HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<HttpStatus>(HttpStatus.EXPECTATION_FAILED);
 	}
 	
 	

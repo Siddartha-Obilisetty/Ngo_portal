@@ -16,6 +16,8 @@ import com.capgemini.model.DonationDistribution;
 import com.capgemini.model.DonationDistributionStatus;
 import com.capgemini.model.Employee;
 
+//Repository class
+
 @Repository
 public interface AdminDao extends JpaRepository<Admin, Integer>
 {	
