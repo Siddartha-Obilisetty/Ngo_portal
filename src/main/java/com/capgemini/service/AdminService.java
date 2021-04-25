@@ -16,7 +16,7 @@ public interface AdminService
 	public Employee findEmployeeById(int employeeId) throws NoSuchEmployeeException;
 	public List<Employee> findEmployeeByName(String name) throws NoSuchEmployeeException;
 	public List<Employee> findAllEmployee();
-	public DonationDistributionStatus approveDonation(DonationDistribution distribution);
+	public DonationDistributionStatus approveDonation(int np_id);
 	public void addAddress(Address address);
 	public boolean removeAddress(int add_Id);
 }

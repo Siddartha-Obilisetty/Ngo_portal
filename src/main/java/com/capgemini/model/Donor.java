@@ -1,14 +1,20 @@
 package com.capgemini.model;
 
+//imports
+
 import javax.persistence.*;
+
+//Entity Class
 
 @Entity
 public class Donor 
 {
 	@Id
-	private int donor_id;
+	@Column(name = "donor_id")
+	private int donorId;
 	
-	private String donor_name;
+	@Column(name = "donor_name")
+	private String donorName;
 	
 	private String email;
 	
@@ -18,37 +24,38 @@ public class Donor
 	
 	private String password;
 	
+	//OneToOne Unidirectional Mapping
 	@OneToOne
-	@JoinColumn(name = "add_Id")
+	@JoinColumn(name = "address_id")
 	private Address address;
 		
-	public Donor() {}
+	public Donor() {}	//no parameter constructor
 
-	public Donor(int donor_id, String donor_name, String email, String phone, String username, String password,Address address) {
-		super();
-		this.donor_id = donor_id;
-		this.donor_name = donor_name;
-		this.email = email;
-		this.phone = phone;
-		this.username = username;
-		this.password = password;
+	//Parameterized constructor
+	public Donor(int donorId, String donorName, String email, String phone, String username, String password,
+			Address address) {
+		this.donorId = donorId;		this.donorName = donorName;
+		this.email = email;			this.phone = phone;
+		this.username = username;	this.password = password;
 		this.address=address;
 	}
 
-	public int getDonor_id() {
-		return donor_id;
+	//Getters and Setters
+	
+	public int getDonorId() {
+		return donorId;
 	}
 
-	public void setDonor_id(int donor_id) {
-		this.donor_id = donor_id;
+	public void setDonorId(int donorId) {
+		this.donorId = donorId;
 	}
 
-	public String getDonor_name() {
-		return donor_name;
+	public String getDonorName() {
+		return donorName;
 	}
 
-	public void setDonor_name(String donor_name) {
-		this.donor_name = donor_name;
+	public void setDonorName(String donorName) {
+		this.donorName = donorName;
 	}
 
 	public String getEmail() {
@@ -90,7 +97,13 @@ public class Donor
 	public void setAddress(Address address) {
 		this.address = address;
 	}
+
+	//ToString
 	
-	
+	@Override
+	public String toString() {
+		return "Donor [donorId=" + donorId + ", donorName=" + donorName + ", email=" + email + ", phone=" + phone
+				+ ", username=" + username + ", password=" + password + ", address=" + address + "]";
+	}
 
 }

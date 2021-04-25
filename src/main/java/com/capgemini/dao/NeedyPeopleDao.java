@@ -34,19 +34,19 @@ public interface NeedyPeopleDao  extends JpaRepository<NeedyPeople, Integer>
 	public int createNeedyPerson(@Param("np_id")int np_id,@Param("np_name")String np_name,@Param("phone")String phone,@Param("familyincome")double familyincome,@Param("username")String username,@Param("password")String password,@Param("donation_type")DonationType donationType,@Param("add_id")int add_id)throws SQLException;
 	
 	@Modifying
-	@Query(value="insert into Request_Status (id,np_id) values(:id,:np_id)",nativeQuery = true)
-	public int requestForHelp(@Param("id")int id, @Param("np_id")int np_id);
+	@Query(value="update NeedyPeople np set np.request=:request where np.np_id=:np_id ",nativeQuery = true)
+	public int requestForHelp(@Param("request")int request, @Param("np_id")int np_id);
 	
 	@Query(value="select p.password from NeedyPeople p where p.username=?1")
 	public String readLoginData(String username);
 
 	@Modifying
 	@Query(value="insert into Donation_Item (item_id,item_desc,donation_Type) values (?1,?2,?3)",nativeQuery = true)
-	public int addDonationItem(int item_id,String item_desc,DonationType donationType);
+	public int addDonationItem(Long item_id,String item_desc,DonationType donationType);
 	
 	@Modifying
 	@Query(value="insert into Donation_Distribution (distributionid,amt_distributed,status,item_id,np_id,empid) values (?1,?2,?3,?4,?5,?6)",nativeQuery = true)
-	public int addDonationDistribution(int distributionid, double amt_distributed,DonationDistributionStatus status, int item_id, int np_id,int empid);
+	public int addDonationDistribution(Long distributionid, double amt_distributed,DonationDistributionStatus status, Long long2, int np_id,int empid);
 	
 
 	

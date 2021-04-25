@@ -1,48 +1,69 @@
 package com.capgemini.model;
 
+//imports
+
 import javax.persistence.*;
+
+//Entity Class
 
 @Entity
 public class Admin 
 {
 	@Id
-	private int adminid;
+	@Column(name = "admin_id")
+	private int adminId;
 	
-	private String admin_username;
+	@Column(name = "admin_username")
+	private String adminUsername;
 	
-	private String admin_password;
+	@Column(name = "admin_password")
+	private String adminPassword;
 	
 	
-	public Admin() {}
+	public Admin() {}	//no parameter constructor
 	
-	public Admin(int adminid, String admin_username, String admin_password) {
-		super();
-		this.adminid = adminid;
-		this.admin_username = admin_username;
-		this.admin_password = admin_password;
+	//Parameterized constructor
+	public Admin(int adminId, String adminUsername, String adminPassword) {
+		this.adminId = adminId;				this.adminUsername = adminUsername;
+		this.adminPassword = adminPassword;
 	}
 
-	public int getAdminid() {
-		return adminid;
-	}
-	public void setAdminid(int adminid) {
-		this.adminid = adminid;
+	//Getters and Setters
+	public int getAdminId() {
+		return adminId;
 	}
 
-	public String getAdmin_username() {
-		return admin_username;
+
+	public void setAdminId(int adminId) {
+		this.adminId = adminId;
 	}
 
-	public void setAdmin_username(String admin_username) {
-		this.admin_username = admin_username;
+
+	public String getAdminUsername() {
+		return adminUsername;
 	}
 
-	public String getAdmin_password() {
-		return admin_password;
+
+	public void setAdminUsername(String adminUsername) {
+		this.adminUsername = adminUsername;
 	}
 
-	public void setAdmin_password(String admin_password) {
-		this.admin_password = admin_password;
+
+	public String getAdminPassword() {
+		return adminPassword;
+	}
+
+
+	public void setAdminPassword(String adminPassword) {
+		this.adminPassword = adminPassword;
+	}
+
+	//ToString
+	
+	@Override
+	public String toString() {
+		return "Admin [adminId=" + adminId + ", adminUsername=" + adminUsername + ", adminPassword=" + adminPassword
+				+ "]";
 	}
 	
 	

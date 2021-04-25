@@ -1,77 +1,95 @@
 package com.capgemini.model;
 
+//imports
+
 import java.util.Date;
 import javax.persistence.*;
 
 import org.hibernate.annotations.Type;
 
+//Entity class
+
 @Entity
 public class Donation 
 {
 	@Id
-	private int donation_id;
+	@Column(name="donation_id")
+	private int donationId;
 	
-	private double donation_amount;
+	@Column(name="donation_amount")
+	private double donationAmount;
 	
-	private Date donation_date;
+	@Column(name="donation_date")
+	private Date donationDate;
 	
-	
+	//OneToOne Unidirectional Mapping
 	@OneToOne
 	@JoinColumn(name = "item_id")
 	private DonationItem item;
 	
+	//OneToOne Unidirectional Mapping
 	@OneToOne
 	@JoinColumn(name = "donor_id")
 	private Donor donor;
 	
-	public Donation() {}
+	public Donation() {}	//no parameter constructor
 	
-	public Donation(int donation_id, double donation_amount, Date donation_date, DonationItem item, Donor donor) {
-		super();
-		this.donation_id = donation_id;
-		this.donation_amount = donation_amount;
-		this.donation_date = donation_date;
-		this.item = item;
+	//Parameterized constructor
+	public Donation(int donationId, double donationAmount, Date donationDate, DonationItem item, Donor donor) {
+		this.donationId = donationId;		this.donationAmount = donationAmount;
+		this.donationDate = donationDate;	this.item = item;
 		this.donor = donor;
 	}
 
-	public int getDonation_id() {
-		return donation_id;
-	}
-
-	public void setDonation_id(int donation_id) {
-		this.donation_id = donation_id;
-	}
-
-	public Date getDonation_date() {
-		return donation_date;
-	}
-
-	public void setDonation_date(Date donation_date) {
-		this.donation_date = donation_date;
-	}
+	//Getters and Setters
 	
-	
-	public double getDonation_amount() {
-		return donation_amount;
+	public int getDonationId() {
+		return donationId;
 	}
 
-	public void setDonatio_amount(double donation_amount) {
-		this.donation_amount = donation_amount;
+	public void setDonationId(int donationId) {
+		this.donationId = donationId;
+	}
+
+	public double getDonationAmount() {
+		return donationAmount;
+	}
+
+	public void setDonationAmount(double donationAmount) {
+		this.donationAmount = donationAmount;
+	}
+
+	public Date getDonationDate() {
+		return donationDate;
+	}
+
+	public void setDonationDate(Date donationDate) {
+		this.donationDate = donationDate;
+	}
+
+	public DonationItem getItem() {
+		return item;
+	}
+
+	public void setItem(DonationItem item) {
+		this.item = item;
 	}
 
 	public Donor getDonor() {
 		return donor;
 	}
+
 	public void setDonor(Donor donor) {
 		this.donor = donor;
 	}
-	public DonationItem getItem() {
-		return item;
-	}
-	public void setItem(DonationItem item) {
-		this.item = item;
-	}
+
+	//ToString
 	
+	@Override
+	public String toString() {
+		return "Donation [donationId=" + donationId + ", donationAmount=" + donationAmount + ", donationDate="
+				+ donationDate + ", item=" + item + ", donor=" + donor + "]";
+	}
+
 	
 }

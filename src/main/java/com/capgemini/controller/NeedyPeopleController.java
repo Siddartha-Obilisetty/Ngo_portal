@@ -29,7 +29,7 @@ public class NeedyPeopleController
 	@GetMapping(value="/login")
 	public ResponseEntity<HttpStatus> login(@RequestParam String username,@RequestParam String password) throws NoSuchNeedyPeopleException, WrongPasswordException {
 		Optional<NeedyPeople> n = needyPeopleService.getByUsername(username);
-		System.out.println(n.get().getNp_id());
+		System.out.println(n.get().getNeedyPeopleId());
 		if(n.isPresent()) {
 			if(n.get().getPassword().equals(needyPeopleService.login(username,password)))
 				return new ResponseEntity<HttpStatus>(HttpStatus.OK);

@@ -36,11 +36,15 @@ public class EmployeeServiceImpl implements EmployeeService
 		DonationDistribution dd = employeeDao.getDonationDistritionByNp_id(np_id);
 		if(dd.getStatus()==DonationDistributionStatus.APPROVED)
 		{
-			dd.setDod(LocalDate.now());
-			
+			dd.setDateOfDistribution(LocalDate.now());
+			employeeDao.helpNeedyPerson(dd);
 			return "Approved and Amount Deducted";
 		}
-		return "rejected";
+		else if(dd.getStatus()==DonationDistributionStatus.REJECTED)
+		{			
+			return "Rejected";
+		}
+		return "Pending";
 	}
 	
 	
@@ -66,14 +70,14 @@ public class EmployeeServiceImpl implements EmployeeService
 	@Override
 	@Transactional
 	public boolean addNeedyPerson(NeedyPeople person) throws DuplicateNeedyPeopleException {
-		Optional<NeedyPeople> np=employeeDao.readNeedyPeopleById(person.getNp_id());
+		Optional<NeedyPeople> np=employeeDao.readNeedyPeopleById(person.getNeedyPeopleId());
 		if(np.isPresent()) {
-			throw new DuplicateNeedyPeopleException(person.getNp_id());
+			throw new DuplicateNeedyPeopleException(person.getNeedyPeopleId());
 		}
 		else {
 			addAddress(person.getAddress());
 			try {
-				employeeDao.createNeedyPerson(person.getNp_id(), person.getNp_name(), person.getPhone(), person.getFamily_income(),person.getUsername(),person.getPassword(),person.getDonationType(), person.getAddress().getAdd_Id());
+				employeeDao.createNeedyPerson(person.getNeedyPeopleId(), person.getNeedyPeopleName(), person.getPhone(), person.getFamilyIncome(),person.getUsername(),person.getPassword(),person.getType(), person.getAddress().getAddressId());
 			} catch (SQLException e) {
 				System.out.println(e.getMessage());
 			}
@@ -89,7 +93,7 @@ public class EmployeeServiceImpl implements EmployeeService
 			Optional<NeedyPeople> np = employeeDao.readNeedyPeopleById(id);
 			if(np.isPresent()) {
 				employeeDao.deleteNeedyPerson(id);
-				employeeDao.deleteAddress(np.get().getAddress().getAdd_Id());
+				employeeDao.deleteAddress(np.get().getAddress().getAddressId());
 				return true;
 			}
 			else {
@@ -129,7 +133,7 @@ public class EmployeeServiceImpl implements EmployeeService
 	public void addAddress(Address a) {
 		System.out.println("in address method");
 		try {
-			employeeDao.addAddress(a.getAdd_Id(), a.getCity(), a.getState(), a.getPin(), a.getLandmark());
+			employeeDao.addAddress(a.getAddressId(), a.getCity(), a.getState(), a.getPin(), a.getLandmark());
 		} catch (SQLException e) {
 			System.out.println(e.getMessage());
 		}		

@@ -1,12 +1,17 @@
 package com.capgemini.model;
 
+//imports
+
 import javax.persistence.*;
+
+//Entity class
 
 @Entity
 public class Address 
-{
+{	
 	@Id
-	private int add_Id;
+	@Column(name = "address_id")
+	private int addressId;
 	
 	private String city;
 	
@@ -16,25 +21,24 @@ public class Address
 	
 	private String landmark;
 	
+	public Address() {}		//no parameter constructor
 	
-	public Address() {}
-	
-	public Address(int add_Id, String city, String state, String pin, String landmark) {
-		super();
-		this.add_Id = add_Id;
-		this.city = city;
-		this.state = state;
-		this.pin = pin;
+	//Parameterized constructor
+	public Address(int addressId, String city, String state, String pin, String landmark) {
+		this.addressId = addressId;		this.city = city;
+		this.state = state;				this.pin = pin;
 		this.landmark = landmark;
 	}
+
+
+	//Getters and Setters
 	
-	
-	public int getAdd_Id() {
-		return add_Id;
+	public int getAddressId() {
+		return addressId;
 	}
 
-	public void setAdd_Id(int add_Id) {
-		this.add_Id = add_Id;
+	public void setAddressId(int addressId) {
+		this.addressId = addressId;
 	}
 
 	public String getCity() {
@@ -61,10 +65,12 @@ public class Address
 	public void setLandmark(String landmark) {
 		this.landmark = landmark;
 	}
+	
+	//ToString
 
 	@Override
 	public String toString() {
-		return "Address [add_Id=" + add_Id + ", city=" + city + ", state=" + state + ", pin=" + pin + ", landmark="
+		return "Address [addressId=" + addressId + ", city=" + city + ", state=" + state + ", pin=" + pin + ", landmark="
 				+ landmark + "]";
 	}
 	

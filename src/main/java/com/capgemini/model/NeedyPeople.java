@@ -1,137 +1,144 @@
 package com.capgemini.model;
 
+//imports
+
 import javax.persistence.*;
 
 import org.hibernate.annotations.Type;
+
+//Entity class
 
 @Entity
 @Table(name="needy_people")
 public class NeedyPeople 
 {
 	@Id
-	private int np_id;
+	@Column(name="needy_people_id")
+	private int needyPeopleId;
 	
-	private String np_name;
+	@Column(name="needy_people_name")
+	private String needyPeopleName;
 	
 	private String phone;
 	
-	private double family_income;
+	@Column(name="family_income")
+	private double familyIncome;
 	
 	private String username;
 	
 	private String password;
 	
+	//enum class
 	@Enumerated(EnumType.STRING)
 	@Type(type = "com.capgemini.model.DonationType")
-	private DonationType donationType;
+	private DonationType type;
 	
+	private int request;
+	
+	//OneToOne Unidirectional Mapping
 	@OneToOne
-	@JoinColumn(name = "add_Id")
+	@JoinColumn(name = "address_id")
 	private Address address;
 	
-	public NeedyPeople() {}
-	
-	
+	public NeedyPeople() {}	//no parameter constructor
 
-
-	public NeedyPeople(int np_id, String np_name, String phone, double family_income, String username, String password,
-			DonationType donationType, Address address) {
-		super();
-		this.np_id = np_id;
-		this.np_name = np_name;
-		this.phone = phone;
-		this.family_income = family_income;
-		this.username = username;
-		this.password = password;
-		this.donationType = donationType;
+	//Parameterized constructor
+	
+	public NeedyPeople(int needyPeopleId, String needyPeopleName, String phone, double familyIncome, String username,
+			String password, DonationType type, int request, Address address) {
+		this.needyPeopleId = needyPeopleId;		this.needyPeopleName = needyPeopleName;
+		this.phone = phone;						this.familyIncome = familyIncome;
+		this.username = username;				this.password = password;
+		this.type = type;						this.request = request;
 		this.address = address;
 	}
 
-
-
-
-	public int getNp_id() {
-		return np_id;
+	//Getters and Setters
+	
+	public int getNeedyPeopleId() {
+		return needyPeopleId;
 	}
 
-
-	public void setNp_id(int np_id) {
-		this.np_id = np_id;
+	public void setNeedyPeopleId(int needyPeopleId) {
+		this.needyPeopleId = needyPeopleId;
 	}
 
-
-	public String getNp_name() {
-		return np_name;
+	public String getNeedyPeopleName() {
+		return needyPeopleName;
 	}
 
-
-	public void setNp_name(String np_name) {
-		this.np_name = np_name;
+	public void setNeedyPeopleName(String needyPeopleName) {
+		this.needyPeopleName = needyPeopleName;
 	}
-
 
 	public String getPhone() {
 		return phone;
 	}
 
-
 	public void setPhone(String phone) {
 		this.phone = phone;
 	}
 
-
-	public double getFamily_income() {
-		return family_income;
+	public double getFamilyIncome() {
+		return familyIncome;
 	}
 
-
-	public void setFamily_income(double family_income) {
-		this.family_income = family_income;
+	public void setFamilyIncome(double familyIncome) {
+		this.familyIncome = familyIncome;
 	}
-
-	public DonationType getDonationType() {
-		return donationType;
-	}
-
-
-	public void setDonationType(DonationType donationType) {
-		this.donationType = donationType;
-	}
-
-
-	public Address getAddress() {
-		return address;
-	}
-	public void setAddress(Address address) {
-		this.address = address;
-	}
-
-
-
 
 	public String getUsername() {
 		return username;
 	}
 
-
-
-
 	public void setUsername(String username) {
 		this.username = username;
 	}
-
-
-
 
 	public String getPassword() {
 		return password;
 	}
 
-
-
-
 	public void setPassword(String password) {
 		this.password = password;
 	}
+
+	public DonationType getType() {
+		return type;
+	}
+
+	public void setType(DonationType type) {
+		this.type = type;
+	}
+
+	public int getRequest() {
+		return request;
+	}
+
+	public void setRequest(int request) {
+		this.request = request;
+	}
+
+	public Address getAddress() {
+		return address;
+	}
+
+	public void setAddress(Address address) {
+		this.address = address;
+	}
+
+	//ToString
 	
+	@Override
+	public String toString() {
+		return "NeedyPeople [needyPeopleId=" + needyPeopleId + ", needyPeopleName=" + needyPeopleName + ", phone="
+				+ phone + ", familyIncome=" + familyIncome + ", username=" + username + ", password=" + password
+				+ ", type=" + type + ", request=" + request + ", address=" + address + "]";
+	}
+	
+	
+	
+	
+
+
 }

@@ -19,7 +19,6 @@ import com.capgemini.model.DonationItem;
 import com.capgemini.model.DonationType;
 import com.capgemini.model.Employee;
 import com.capgemini.model.NeedyPeople;
-import com.capgemini.model.RequestStatus;
 import com.capgemini.service.EmployeeService;
 import com.capgemini.service.NeedyPeopleService;
 
@@ -40,19 +39,20 @@ public class NeedyPeopleServiceImpl implements NeedyPeopleService
 	public boolean requestForHelp(int np_id) {
 		DonationDistribution dd = new DonationDistribution();
 		DonationItem di = new DonationItem();
-		RequestStatus rs = new RequestStatus(needyPeople.findById(np_id).get());
-		dd.setNeedyPeople(needyPeople.findById(np_id).get());
-		dd.setAmt_distributed(500);
+		NeedyPeople np=needyPeople.findById(np_id).get();
+		np.setRequest(1);
+		dd.setNeedyPeople(np);
+		dd.setAmountDistributed(500);
 		dd.setStatus(DonationDistributionStatus.PENDING);
 		
-		di.setDonationType(DonationType.MONEY);
-		di.setItem_desc("Money");
+		di.setType(DonationType.MONEY);
+		di.setItemDescription("Money");
 		dd.setDonationItem(di);
 		dd.setEmployee(employee.findById(102).get());
 		
-		needyPeople.addDonationItem(di.getItem_id(),"Money", DonationType.MONEY);
-		needyPeople.addDonationDistribution(dd.getDistributionid(),dd.getAmt_distributed(),dd.getStatus(),dd.getDonationItem().getItem_id(),dd.getNeedyPeople().getNp_id(),dd.getEmployee().getEmpid());
-		needyPeople.requestForHelp(rs.getId(), np_id);
+		needyPeople.addDonationItem(di.getItemId(),"Money", DonationType.MONEY);
+		needyPeople.addDonationDistribution(dd.getDistributionId(),dd.getAmountDistributed(),dd.getStatus(),dd.getDonationItem().getItemId(),dd.getNeedyPeople().getNeedyPeopleId(),dd.getEmployee().getEmployeeId());
+		needyPeople.requestForHelp(np.getRequest(), np_id);
 		return true;
 	}
 
@@ -78,13 +78,13 @@ public class NeedyPeopleServiceImpl implements NeedyPeopleService
 	@Transactional
 	@Override
 	public boolean registerNeedyPerson(NeedyPeople person) throws DuplicateNeedyPeopleException {
-		Optional<NeedyPeople> np = needyPeople.findById(person.getNp_id());
+		Optional<NeedyPeople> np = needyPeople.findById(person.getNeedyPeopleId());
 		if(np.isPresent()) {
-			throw new DuplicateNeedyPeopleException(person.getNp_id());
+			throw new DuplicateNeedyPeopleException(person.getNeedyPeopleId());
 		}
 		try {
-			needyPeople.addAddress(person.getAddress().getAdd_Id(), person.getAddress().getCity(),person.getAddress().getState(), person.getAddress().getPin(), person.getAddress().getLandmark());
-			needyPeople.createNeedyPerson(person.getNp_id(), person.getNp_name(), person.getPhone(), person.getFamily_income(),person.getUsername(),person.getPassword(),person.getDonationType(), person.getAddress().getAdd_Id());
+			needyPeople.addAddress(person.getAddress().getAddressId(), person.getAddress().getCity(),person.getAddress().getState(), person.getAddress().getPin(), person.getAddress().getLandmark());
+			needyPeople.createNeedyPerson(person.getNeedyPeopleId(), person.getNeedyPeopleName(), person.getPhone(), person.getFamilyIncome(),person.getUsername(),person.getPassword(),person.getType(), person.getAddress().getAddressId());
 			return true;
 		}
 		catch(SQLException e)

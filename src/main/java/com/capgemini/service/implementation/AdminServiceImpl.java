@@ -1,4 +1,7 @@
 package com.capgemini.service.implementation;
+
+//imports
+
 import com.capgemini.dao.AdminDao;
 import com.capgemini.exception.DuplicateEmployeeException;
 import com.capgemini.exception.NoSuchEmployeeException;
@@ -19,24 +22,31 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+//Service class
+
 @Service
 public class AdminServiceImpl implements AdminService
 {
 	@Autowired
-	AdminDao admin;
-
+	AdminDao adminDao;
+	
+	//Approve Donation Method
 	@Transactional
 	@Override
-	public DonationDistributionStatus approveDonation(DonationDistribution distribution) {
+	public DonationDistributionStatus approveDonation(int np_id) {
+		DonationDistribution distribution = adminDao.getDonationDistritionByNp_id(np_id);
 		LocalDate d = LocalDate.now();
-		if(distribution.getNeedyPeople().getFamily_income()<200000) {
+		System.out.println(distribution.getNeedyPeople().getNeedyPeopleId());
+		if(distribution.getNeedyPeople().getFamilyIncome()<=200000.0) {
 			distribution.setStatus(DonationDistributionStatus.APPROVED);
-			distribution.setApp_or_rej_date(d);
+			distribution.setApprovalOrRejectedDate(d);
+			adminDao.approveDonation(distribution);
 			return DonationDistributionStatus.APPROVED;
 		}
 		else {
 			distribution.setStatus(DonationDistributionStatus.REJECTED);
-			distribution.setApp_or_rej_date(d);
+			distribution.setApprovalOrRejectedDate(d);
+			adminDao.approveDonation(distribution);
 			return DonationDistributionStatus.REJECTED;
 		}
 	}
@@ -45,7 +55,7 @@ public class AdminServiceImpl implements AdminService
 	@Override
 	public boolean removeAddress(int add_Id) {
 	try {
-		admin.deleteAddress(add_Id);
+		adminDao.deleteAddress(add_Id);
 	} 
 	catch (SQLException e) {
 		System.out.println(e.getMessage());
@@ -59,10 +69,10 @@ public class AdminServiceImpl implements AdminService
 	{
 		try{
 			Employee e = null;
-			e= admin.readEmployeeById(employeeId);
+			e= adminDao.readEmployeeById(employeeId);
 			if(e!=null) {
-				admin.deleteEmployee(employeeId);
-				this.removeAddress(e.getAddress().getAdd_Id());
+				adminDao.deleteEmployee(employeeId);
+				this.removeAddress(e.getAddress().getAddressId());
 				return true;
 			}
 			else {
@@ -75,12 +85,13 @@ public class AdminServiceImpl implements AdminService
 		}
 	}
 	
+	
 	@Transactional
 	public void addAddress(Address a)
 	{
 		//admin.addAddress(a);
 		try {
-			admin.addAddress(a.getAdd_Id(),a.getCity(),a.getState(),a.getPin(),a.getLandmark());
+			adminDao.addAddress(a);
 		} catch (SQLException e) {
 			System.out.println(e.getMessage());
 		}
@@ -91,14 +102,14 @@ public class AdminServiceImpl implements AdminService
 	public boolean addEmployee(Employee e) throws DuplicateEmployeeException {
 		try{
 			Employee emp =null;
-			emp= admin.readEmployeeById(e.getEmpid());
+			emp= adminDao.readEmployeeById(e.getEmployeeId());
 			if(emp==null) {
 				addAddress(e.getAddress());
-				int i=admin.createEmployee(e.getEmpid(),e.getEname(),e.getEmail(),e.getPhone(),e.getUsername(),e.getPassword(), e.getAddress().getAdd_Id());
+				int i=adminDao.createEmployee(e);
 				return true;
 			}
 			else {
-				throw new DuplicateEmployeeException(e.getEmpid());
+				throw new DuplicateEmployeeException(e.getEmployeeId());
 			}
 		}
 		catch(SQLException ex) {
@@ -135,14 +146,14 @@ public class AdminServiceImpl implements AdminService
 	public boolean modifyEmployee(Employee employee) throws NoSuchEmployeeException {
 		Employee e=null;
 		try{
-			e = admin.readEmployeeById(employee.getEmpid());
+			e = adminDao.readEmployeeById(employee.getEmployeeId());
 			if(e!=null) {
-				admin.updateAddress(employee.getAddress());
-				admin.updateEmployee(employee);
+				adminDao.updateAddress(employee.getAddress());
+				adminDao.updateEmployee(employee);
 				return true;
 			}
 			else {
-				throw new NoSuchEmployeeException(employee.getEmpid());
+				throw new NoSuchEmployeeException(employee.getEmployeeId());
 			}
 		}
 		catch(SQLException ex) {
@@ -156,7 +167,7 @@ public class AdminServiceImpl implements AdminService
 	public Employee findEmployeeById(int employeeId) throws NoSuchEmployeeException {
 		Employee e=null;
 		try{
-			e = admin.readEmployeeById(employeeId);
+			e = adminDao.readEmployeeById(employeeId);
 			if(e!=null) {
 				return e;
 			}
@@ -175,7 +186,7 @@ public class AdminServiceImpl implements AdminService
 	public List<Employee> findEmployeeByName(String name) throws NoSuchEmployeeException {
 		List<Employee> eList=null;
 		try{
-			eList = admin.readEmployeeByName(name);
+			eList = adminDao.readEmployeeByName(name);
 			if(eList.size()!=0) {
 				return eList;
 			}
@@ -193,7 +204,7 @@ public class AdminServiceImpl implements AdminService
 	@Override
 	public List<Employee> findAllEmployee() {
 		try{
-			return admin.readAllEmployees();
+			return adminDao.readAllEmployees();
 		}
 		catch(SQLException ex) {
 			System.out.println(ex.getMessage());

@@ -1,104 +1,106 @@
 package com.capgemini.model;
 
+//imports
+
 import java.time.LocalDate;
 
 import javax.persistence.*;
 
 import org.hibernate.annotations.Type;
 
+//Entity Class
+
 @Entity
+@Table(name="donation_distribution")
 public class DonationDistribution 
 {
 	@Id
-	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator = "id_Sequence")
-	@SequenceGenerator(name = "id_Sequence", sequenceName = "ID_SEQ")
-	private int distributionid;
+	@GeneratedValue(strategy=GenerationType.AUTO)
+	@SequenceGenerator(name="distributionId_generator",sequenceName = "distribution_seq",allocationSize = 50)
+	@Column(name = "distribution_id")
+	private Long distributionId;
 	
-	private double amt_distributed;
+	@Column(name="amount_distributed")
+	private double amountDistributed;
 	
-	private LocalDate dod;
+	@Column(name="date_of_distribution")
+	private LocalDate dateOfDistribution;
 	
-	private LocalDate app_or_rej_date;
+	@Column(name="approval_or_rejected_date")
+	private LocalDate approvalOrRejectedDate;
 	
+	//enum class
 	@Enumerated(EnumType.STRING)
 	@Type(type = "com.capgemini.model.DonationDistributionStatus")
 	private DonationDistributionStatus status;
 	
-
+	//OneToOne Unidirectional Mapping
 	@OneToOne
-	@JoinColumn(name = "np_id")
+	@JoinColumn(name = "needy_people_id")
 	private NeedyPeople needyPeople;
 	
-
+	//OneToOne Unidirectional Mapping
 	@OneToOne
 	@JoinColumn(name = "item_id")
 	private DonationItem donationItem;
 	
-
+	//OneToOne Unidirectional Mapping
 	@OneToOne
-	@JoinColumn(name = "empid")
+	@JoinColumn(name = "employee_id")
 	private Employee employee;
 		
-	public DonationDistribution() {}
+	public DonationDistribution() {}	//no parameter constructor
+
+	//Parameterized constructor
 	
-
-	public DonationDistribution(int distributionid, double amt_distributed, LocalDate dod, LocalDate app_or_rej_date,
-			DonationDistributionStatus status, NeedyPeople needyPeople, DonationItem donationItem, Employee employee) {
-		super();
-		this.distributionid = distributionid;
-		this.amt_distributed = amt_distributed;
-		this.dod = dod;
-		this.app_or_rej_date = app_or_rej_date;
-		this.status = status;
-		this.needyPeople = needyPeople;
-		this.donationItem = donationItem;
-		this.employee = employee;
+	public DonationDistribution(Long distributionId, double amountDistributed, LocalDate dateOfDistribution,
+			LocalDate approvalOrRejectedDate, DonationDistributionStatus status, NeedyPeople needyPeople,
+			DonationItem donationItem, Employee employee) {
+		this.distributionId = distributionId;			this.amountDistributed = amountDistributed;
+		this.dateOfDistribution = dateOfDistribution;	this.approvalOrRejectedDate = approvalOrRejectedDate;
+		this.status = status;							this.needyPeople = needyPeople;
+		this.donationItem = donationItem;				this.employee = employee;
 	}
 
-
-	public int getDistributionid() {
-		return distributionid;
+	
+	//Getters and Setters
+	
+	public Long getDistributionId() {
+		return distributionId;
 	}
 
-
-	public void setDistributionid(int distributionid) {
-		this.distributionid = distributionid;
+	public void setDistributionId(Long distributionId) {
+		this.distributionId = distributionId;
 	}
 
-
-	public double getAmt_distributed() {
-		return amt_distributed;
+	public double getAmountDistributed() {
+		return amountDistributed;
 	}
 
-
-	public void setAmt_distributed(double amt_distributed) {
-		this.amt_distributed = amt_distributed;
+	public void setAmountDistributed(double amountDistributed) {
+		this.amountDistributed = amountDistributed;
 	}
 
-
-	public LocalDate getDod() {
-		return dod;
+	public LocalDate getDateOfDistribution() {
+		return dateOfDistribution;
 	}
 
-
-	public void setDod(LocalDate dod) {
-		this.dod = dod;
+	public void setDateOfDistribution(LocalDate dateOfDistribution) {
+		this.dateOfDistribution = dateOfDistribution;
 	}
 
-
-	public LocalDate getApp_or_rej_date() {
-		return app_or_rej_date;
+	public LocalDate getApprovalOrRejectedDate() {
+		return approvalOrRejectedDate;
 	}
 
-
-	public void setApp_or_rej_date(LocalDate app_or_rej_date) {
-		this.app_or_rej_date = app_or_rej_date;
+	public void setApprovalOrRejectedDate(LocalDate approvalOrRejectedDate) {
+		this.approvalOrRejectedDate = approvalOrRejectedDate;
 	}
-
 
 	public DonationDistributionStatus getStatus() {
 		return status;
 	}
+
 	public void setStatus(DonationDistributionStatus status) {
 		this.status = status;
 	}
@@ -125,6 +127,16 @@ public class DonationDistribution
 
 	public void setEmployee(Employee employee) {
 		this.employee = employee;
+	}
+
+	//ToString
+	
+	@Override
+	public String toString() {
+		return "DonationDistribution [distributionId=" + distributionId + ", amountDistributed=" + amountDistributed
+				+ ", dateOfDistribution=" + dateOfDistribution + ", approvalOrRejectedDate=" + approvalOrRejectedDate
+				+ ", status=" + status + ", needyPeople=" + needyPeople + ", donationItem=" + donationItem
+				+ ", employee=" + employee + "]";
 	}
 	
 }

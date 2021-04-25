@@ -1,58 +1,71 @@
 package com.capgemini.model;
 
+//imports
+
 import javax.persistence.*;
 
 import org.hibernate.annotations.Type;
 
+//Entity class
+
 @Entity
+@Table(name="donation_item")
 public class DonationItem 
 {
 	@Id
-	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator = "id_Sequence")
-	@SequenceGenerator(name = "id_Sequence", sequenceName = "ID_SEQ")
-	private int item_id;
+	@GeneratedValue(strategy=GenerationType.AUTO)
+	@SequenceGenerator(name = "item_generator",sequenceName = "item_seq",allocationSize = 50)
+	@Column(name="item_id")
+	private Long itemId;
 	
-	private String item_desc;
+	@Column(name="item_description")
+	private String itemDescription;
 	
+	//enum class
 	@Enumerated(EnumType.STRING)
 	@Type(type = "com.capgemini.model.DonationType")
-	private DonationType donationType;
+	private DonationType type;
 	
-	public DonationItem() {}
+	public DonationItem() {}	//no parameter constructor
+
+	//Parameterized constructor
 	
+	public DonationItem(Long itemId, String itemDescription, DonationType type) {
+		this.itemId = itemId;	this.itemDescription = itemDescription;
+		this.type = type;
+	}
+
+	//Getters and Setters
 	
-	public DonationItem(int item_id, String item_desc, DonationType donationType) {
-		super();
-		this.item_id = item_id;
-		this.item_desc = item_desc;
-		this.donationType = donationType;
+	public Long getItemId() {
+		return itemId;
 	}
 
+	public void setItemId(Long itemId) {
+		this.itemId = itemId;
+	}
+
+	public String getItemDescription() {
+		return itemDescription;
+	}
+
+	public void setItemDescription(String itemDescription) {
+		this.itemDescription = itemDescription;
+	}
+
+	public DonationType getType() {
+		return type;
+	}
+
+	public void setType(DonationType type) {
+		this.type = type;
+	}
+
+	//ToString
 	
-	public int getItem_id() {
-		return item_id;
+	@Override
+	public String toString() {
+		return "DonationItem [itemId=" + itemId + ", itemDescription=" + itemDescription + ", type=" + type + "]";
 	}
-
-
-	public void setItem_id(int item_id) {
-		this.item_id = item_id;
-	}
-
-
-	public String getItem_desc() {
-		return item_desc;
-	}
-
-
-	public void setItem_desc(String item_desc) {
-		this.item_desc = item_desc;
-	}
-
-
-	public DonationType getDonationType() {
-		return donationType;
-	}
-	public void setDonationType(DonationType donationType) {
-		this.donationType = donationType;
-	}
+	
 }

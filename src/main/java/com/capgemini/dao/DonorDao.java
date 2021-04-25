@@ -20,7 +20,7 @@ public interface DonorDao extends JpaRepository<Donor, Integer>
 	public Optional<Donor> findByUsername(String username);
 	
 	@Modifying
-	@Query(value="update DonationBox d set d.total_money_collection=d.total_money_collection+:#{#donation.getDonation_amount()}")
+	@Query(value="update Donation_Box d set d.total_money_collection=d.total_money_collection+:#{#donation.getDonation_amount()}",nativeQuery = true)
 	public int donateToNGO(Donation donation);
 
 	@Query(value="select d.password from Donor d where d.username=?1")
@@ -48,7 +48,7 @@ public interface DonorDao extends JpaRepository<Donor, Integer>
 	public Donor findDonorByDonorUsername(String username);
 
 	@Query(value="insert into Donation (donation_id,donation_amount,item_id) values(?1,?2,?3)",nativeQuery = true)
-	public int addDonation(int donation_id, double donation_amount, int item_id);
+	public int addDonation(int donation_id, double donation_amount, Long item_id);
 	
 	
 }

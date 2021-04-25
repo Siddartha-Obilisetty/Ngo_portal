@@ -48,7 +48,9 @@ public interface EmployeeDao extends JpaRepository<Employee, Integer>
 	@Query(value="select d from Donation_Distribution d where d.np_id=?1",nativeQuery = true)
 	public DonationDistribution getDonationDistritionByNp_id(int np_id);
 	
-	//public String helpNeedyPerson(DonationDistribution distribute);
+	@Modifying
+	@Query("update DonationDistribution dd set dd.dateOfDistribution=:#{#distribute.getDateOfDistribution()}")
+	public String helpNeedyPerson(DonationDistribution distribute);
 
 }
 

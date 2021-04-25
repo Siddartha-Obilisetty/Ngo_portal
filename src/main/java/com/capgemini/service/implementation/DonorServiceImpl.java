@@ -70,7 +70,7 @@ public class DonorServiceImpl implements DonorService
 	{
 		//admin.addAddress(a);
 		try {
-			donorDao.addAddress(a.getAdd_Id(),a.getCity(),a.getState(),a.getPin(),a.getLandmark());
+			donorDao.addAddress(a.getAddressId(),a.getCity(),a.getState(),a.getPin(),a.getLandmark());
 		} catch (SQLException e) {
 			System.out.println(e.getMessage());
 		}
@@ -82,11 +82,11 @@ public class DonorServiceImpl implements DonorService
 		try {
 			Donor d = donorDao.findDonorByDonorUsername(donor.getUsername());
 			if(d!=null) {
-				throw new DuplicateDonorException(donor.getDonor_id());
+				throw new DuplicateDonorException(donor.getDonorId());
 			}
 			else {
 				this.addAddress(donor.getAddress());
-				donorDao.createDonor(donor.getDonor_id(), donor.getDonor_name(), donor.getEmail(), donor.getPhone(), donor.getUsername(), donor.getPassword(), donor.getAddress().getAdd_Id());
+				donorDao.createDonor(donor.getDonorId(), donor.getDonorName(), donor.getEmail(), donor.getPhone(), donor.getUsername(), donor.getPassword(), donor.getAddress().getAddressId());
 				return true;
 			}
 		}
@@ -99,7 +99,7 @@ public class DonorServiceImpl implements DonorService
 	@Transactional
 	@Override
 	public int donateToNGO(Donation donation) {
-		donorDao.addDonation(donation.getDonation_id(),donation.getDonation_amount(),donation.getItem().getItem_id());
+		donorDao.addDonation(donation.getDonationId(),donation.getDonationAmount(),donation.getItem().getItemId());
 		sendThankyouMailToDonator(donation.getDonor());
 		return donorDao.donateToNGO(donation);
 	}

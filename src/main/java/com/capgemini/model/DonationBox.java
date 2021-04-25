@@ -1,118 +1,129 @@
 package com.capgemini.model;
 
+//imports
+
 import javax.persistence.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
+//Entity Class
+
 @Entity
+@Table(name = "donation_box")
 public class DonationBox 
 {
 	@Id
-	private String ngo_name="Sprint NGO";
+	@Column(name = "ngo_name")
+	private String ngoName;
 	
-	private String reg_no="1234";
+	@Column(name = "registration_no")
+	private String registrationNo;
 	
-	private String acc_no="xxxxxxxxxxxx2021";
+	@Column(name="account_no")
+	private String accountNo;
 	
-	private double total_money_collection=10000.0;
+	@Column(name="total_money_collection")
+	private double totalMoneyCollection;
 	
-	private double total_books_collection=0L;
+	@Column(name="total_books_collection")
+	private double totalBooksCollection;
 	
-	private double total_clothes_collection=0L;
+	@Column(name="total_clothes_collection")
+	private double totalClothesCollection;
 	
-	private double total_edible_collection=0L;
+	@Column(name="total_edible_collection")
+	private double totalEdibleCollection;
 	
-	private double total_other_collection=0L;
-	
-	
-	public DonationBox() {}
-
-	
-	public DonationBox(String ngo_name, String reg_no, String acc_no, double total_money_collection,
-			double total_books_collection, double total_clothes_collection, double total_edible_collection,
-			double total_other_collection) {
-		this.ngo_name = ngo_name;
-		this.reg_no = reg_no;
-		this.acc_no = acc_no;
-		this.total_money_collection = total_money_collection;
-		this.total_books_collection = total_books_collection;
-		this.total_clothes_collection = total_clothes_collection;
-		this.total_edible_collection = total_edible_collection;
-		this.total_other_collection = total_other_collection;
-	}
-
-	public String getNgo_name() {
-		return ngo_name;
-	}
-
-	public void setNgo_name(String ngo_name) {
-		this.ngo_name = ngo_name;
-	}
-
-	public String getReg_no() {
-		return reg_no;
-	}
-
-	public void setReg_no(String reg_no) {
-		this.reg_no = reg_no;
-	}
-
-	public String getAcc_no() {
-		return acc_no;
-	}
-
-	public void setAcc_no(String acc_no) {
-		this.acc_no = acc_no;
-	}
-
-	public double getTotal_money_collection() {
-		return total_money_collection;
-	}
-
-	public void setTotal_collection(double total_money_collection) {
-		this.total_money_collection = total_money_collection;
-	}
-
-
-	public double getTotal_books_collection() {
-		return total_books_collection;
-	}
-
-
-	public void setTotal_books_collection(double total_books_collection) {
-		this.total_books_collection = total_books_collection;
-	}
-
-
-	public double getTotal_clothes_collection() {
-		return total_clothes_collection;
-	}
-
-
-	public void setTotal_clothes_collection(double total_clothes_collection) {
-		this.total_clothes_collection = total_clothes_collection;
-	}
-
-
-	public double getTotal_edible_collection() {
-		return total_edible_collection;
-	}
-
-
-	public void setTotal_edible_collection(double total_edible_collection) {
-		this.total_edible_collection = total_edible_collection;
-	}
-
-
-	public double getTotal_other_collection() {
-		return total_other_collection;
-	}
-
-
-	public void setTotal_other_collection(double total_other_collection) {
-		this.total_other_collection = total_other_collection;
-	}
+	@Column(name="total_other_collection")
+	private double totalOtherCollection;
 	
 	
+	public DonationBox() {}	//no parameter constructor
+
+	//Parameterized constructor
+	public DonationBox(String ngoName, String registrationNo, String accountNo, double totalMoneyCollection,
+			double totalBooksCollection, double totalClothesCollection, double totalEdibleCollection,
+			double totalOtherCollection) {
+		this.ngoName = ngoName;								this.registrationNo = registrationNo;
+		this.accountNo = accountNo;							this.totalMoneyCollection = totalMoneyCollection;
+		this.totalBooksCollection = totalBooksCollection;	this.totalClothesCollection = totalClothesCollection;
+		this.totalEdibleCollection = totalEdibleCollection;	this.totalOtherCollection = totalOtherCollection;
+	}
+
+	//Getters and Setters
+	
+	public String getNgoName() {
+		return ngoName;
+	}
+
+	public void setNgoName(String ngoName) {
+		this.ngoName = ngoName;
+	}
+
+	public String getRegistrationNo() {
+		return registrationNo;
+	}
+
+	public void setRegistrationNo(String registrationNo) {
+		this.registrationNo = registrationNo;
+	}
+
+	public String getAccountNo() {
+		return accountNo;
+	}
+
+	public void setAccountNo(String accountNo) {
+		this.accountNo = accountNo;
+	}
+
+	public double getTotalMoneyCollection() {
+		return totalMoneyCollection;
+	}
+
+	public void setTotalMoneyCollection(double totalMoneyCollection) {
+		this.totalMoneyCollection = totalMoneyCollection;
+	}
+
+	public double getTotalBooksCollection() {
+		return totalBooksCollection;
+	}
+
+	public void setTotalBooksCollection(double totalBooksCollection) {
+		this.totalBooksCollection = totalBooksCollection;
+	}
+
+	public double getTotalClothesCollection() {
+		return totalClothesCollection;
+	}
+
+	public void setTotalClothesCollection(double totalClothesCollection) {
+		this.totalClothesCollection = totalClothesCollection;
+	}
+
+	public double getTotalEdibleCollection() {
+		return totalEdibleCollection;
+	}
+
+	public void setTotalEdibleCollection(double totalEdibleCollection) {
+		this.totalEdibleCollection = totalEdibleCollection;
+	}
+
+	public double getTotalOtherCollection() {
+		return totalOtherCollection;
+	}
+
+	public void setTotalOtherCollection(double totalOtherCollection) {
+		this.totalOtherCollection = totalOtherCollection;
+	}
+
+	//ToString
+	
+	@Override
+	public String toString() {
+		return "DonationBox [ngoName=" + ngoName + ", registrationNo=" + registrationNo + ", accountNo=" + accountNo
+				+ ", totalMoneyCollection=" + totalMoneyCollection + ", totalBooksCollection=" + totalBooksCollection
+				+ ", totalClothesCollection=" + totalClothesCollection + ", totalEdibleCollection="
+				+ totalEdibleCollection + ", totalOtherCollection=" + totalOtherCollection + "]";
+	}
 	
 }

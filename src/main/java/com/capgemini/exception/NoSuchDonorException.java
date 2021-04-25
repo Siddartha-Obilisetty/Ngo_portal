@@ -1,8 +1,12 @@
 package com.capgemini.exception;
 
+//Exception class
+
 public class NoSuchDonorException extends Exception 
 {
 	private int donorId;	
+	
+	//constructor
 	public NoSuchDonorException(int donorId) {
 		this.donorId=donorId;
 	}

@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -33,8 +34,8 @@ public class AdminController
 	}
 	
 	@PutMapping(value="/approveDonation")
-	public ResponseEntity<HttpStatus> approveDonation(@RequestBody DonationDistribution distribution) {
-		adminService.approveDonation(distribution);
+	public ResponseEntity<HttpStatus> approveDonation(@RequestParam int np_id) {
+		adminService.approveDonation(np_id);
 		return new ResponseEntity<HttpStatus>(HttpStatus.OK);
 	}
 	

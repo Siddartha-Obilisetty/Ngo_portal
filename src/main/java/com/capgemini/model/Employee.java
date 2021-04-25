@@ -1,14 +1,20 @@
 package com.capgemini.model;
 
+//imports
+
 import javax.persistence.*;
+
+//Entity class
 
 @Entity
 public class Employee 
 {
 	@Id
-	private int empid;
+	@Column(name = "employee_id")
+	private int employeeId;
 	
-	private String ename;
+	@Column(name = "employee_name")
+	private String employeeName;
 	
 	private String email;
 	
@@ -18,47 +24,44 @@ public class Employee
 	
 	private String password;
 	
+	//OneToOne Unidirectional Mapping
 	@OneToOne
-	@JoinColumn(name = "add_Id")
+	@JoinColumn(name = "address_id")
 	private Address address;
 	
-	public Employee() {}
+	public Employee() {}	//no parameter constructor
 	
-	public Employee(int empid, String ename, String email, String phone, String username, String password,Address address) {
-		super();
-		this.empid = empid;
-		this.ename = ename;
-		this.email = email;
-		this.phone = phone;
-		this.username = username;
-		this.password = password;
-		this.address=address;
-	}
-
+	//Parameterized constructor
 	
-	public int getEmpid() {
-		return empid;
+	public Employee(int employeeId, String employeeName, String email, String phone, String username, String password,
+			Address address) {
+		this.employeeId = employeeId;	this.employeeName = employeeName;
+		this.email = email;				this.phone = phone;
+		this.username = username;		this.password = password;
+		this.address = address;
 	}
 
-
-	public void setEmpid(int empid) {
-		this.empid = empid;
+	//Getters and Setters
+	public int getEmployeeId() {
+		return employeeId;
 	}
 
-
-	public String getEname() {
-		return ename;
+	public void setEmployeeId(int employeeId) {
+		this.employeeId = employeeId;
 	}
 
-
-	public void setEname(String ename) {
-		this.ename = ename;
+	public String getEmployeeName() {
+		return employeeName;
 	}
 
-
+	public void setEmployeeName(String employeeName) {
+		this.employeeName = employeeName;
+	}
+	
 	public String getEmail() {
 		return email;
 	}
+	
 	public void setEmail(String email) {
 		this.email = email;
 	}
@@ -87,12 +90,12 @@ public class Employee
 		this.address = address;
 	}
 
+	//ToString
+	
 	@Override
 	public String toString() {
-		return "Employee [empid=" + empid + ", ename=" + ename + ", email=" + email + ", phone=" + phone + ", username="
-				+ username + ", password=" + password + ", address=" + address + "]";
+		return "Employee [employeeId=" + employeeId + ", employeeName=" + employeeName + ", email=" + email + ", phone="
+				+ phone + ", username=" + username + ", password=" + password + ", address=" + address + "]";
 	}
-	
-	
 
 }
