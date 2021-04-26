@@ -63,7 +63,7 @@ public class NeedyPeopleServiceImpl implements NeedyPeopleService
 	{
 		Optional<NeedyPeople> n = getByUsername(username);
 		if(n.isPresent()) {
-			if(n.get().getPassword().equals(needyPeople.readLoginData(username)))
+			if(password.equals(needyPeople.readLoginData(username)))
 				return true;
 			else
 				throw new WrongCredentialsException();
@@ -82,16 +82,17 @@ public class NeedyPeopleServiceImpl implements NeedyPeopleService
 		np.setRequest(1);
 		
 		DonationItem di = new DonationItem();
+		di.setItemId(1);
 		di.setType(DonationType.MONEY);
 		di.setItemDescription("money");
 		
 		DonationDistribution dd = new DonationDistribution();
+		//dd.setDistributionId(1);
 		dd.setNeedyPeople(np);
 		dd.setAmountDistributed(500);
 		dd.setStatus(DonationDistributionStatus.PENDING);
 		dd.setDonationItem(di);
-		dd.setEmployee(needyPeople.getEmployeeById(102).get());
-		
+		dd.setEmployee(needyPeople.getEmployeeById(501).get());
 		if(needyPeople.addDonationItem(di)!=0)
 			if(needyPeople.addDonationDistribution(dd)!=0)
 				if(needyPeople.requestForHelp(np.getRequest(), np_id)!=0)

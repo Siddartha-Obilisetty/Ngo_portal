@@ -135,8 +135,9 @@ public class AdminServiceImpl implements AdminService
 	//Approve Donation Method
 	@Transactional
 	@Override
-	public DonationDistributionStatus approveDonation(int np_id) {
-		DonationDistribution distribution = adminDao.getDonationDistritionByNp_id(np_id);
+	public DonationDistributionStatus approveDonation(int dd_id) {
+		DonationDistribution distribution = adminDao.getDonationDistritionByDd_id(dd_id);
+		System.out.println(distribution);
 		LocalDate d = LocalDate.now();
 		if(distribution.getNeedyPeople().getFamilyIncome()<=200000.0) {
 			distribution.setStatus(DonationDistributionStatus.APPROVED);

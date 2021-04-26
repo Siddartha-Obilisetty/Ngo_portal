@@ -15,10 +15,10 @@ import org.hibernate.annotations.Type;
 public class DonationDistribution 
 {
 	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
-	@SequenceGenerator(name="distributionId_generator",sequenceName = "distribution_seq",allocationSize = 50)
-	@Column(name = "distribution_id")
-	private Long distributionId;
+	@GeneratedValue(strategy=GenerationType.SEQUENCE,generator = "distributionId_generator")
+	@SequenceGenerator(name="distributionId_generator",initialValue = 50)
+	@Column(name = "distribution_id",updatable = false,unique = true,nullable = false)
+	private int distributionId;
 	
 	@Column(name="amount_distributed")
 	private double amountDistributed;
@@ -53,7 +53,7 @@ public class DonationDistribution
 
 	//Parameterized constructor
 	
-	public DonationDistribution(Long distributionId, double amountDistributed, LocalDate dateOfDistribution,
+	public DonationDistribution(int distributionId, double amountDistributed, LocalDate dateOfDistribution,
 			LocalDate approvalOrRejectedDate, DonationDistributionStatus status, NeedyPeople needyPeople,
 			DonationItem donationItem, Employee employee) {
 		this.distributionId = distributionId;			this.amountDistributed = amountDistributed;
@@ -65,11 +65,11 @@ public class DonationDistribution
 	
 	//Getters and Setters
 	
-	public Long getDistributionId() {
+	public int getDistributionId() {
 		return distributionId;
 	}
 
-	public void setDistributionId(Long distributionId) {
+	public void setDistributionId(int distributionId) {
 		this.distributionId = distributionId;
 	}
 

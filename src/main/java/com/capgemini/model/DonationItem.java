@@ -13,10 +13,10 @@ import org.hibernate.annotations.Type;
 public class DonationItem 
 {
 	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
-	@SequenceGenerator(name = "item_generator",sequenceName = "item_seq",allocationSize = 50)
-	@Column(name="item_id")
-	private Long itemId;
+	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator = "seq_gen")
+	@SequenceGenerator(name = "seq_gen",initialValue = 1)
+	@Column(name="item_id",unique = true,updatable = false,nullable = false)
+	private int itemId;
 	
 	@Column(name="item_description")
 	private String itemDescription;
@@ -30,18 +30,18 @@ public class DonationItem
 
 	//Parameterized constructor
 	
-	public DonationItem(Long itemId, String itemDescription, DonationType type) {
+	public DonationItem(int itemId, String itemDescription, DonationType type) {
 		this.itemId = itemId;	this.itemDescription = itemDescription;
 		this.type = type;
 	}
 
 	//Getters and Setters
 	
-	public Long getItemId() {
+	public int getItemId() {
 		return itemId;
 	}
 
-	public void setItemId(Long itemId) {
+	public void setItemId(int itemId) {
 		this.itemId = itemId;
 	}
 

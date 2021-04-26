@@ -26,7 +26,7 @@ public interface DonorDao extends JpaRepository<Donor, Integer>
 {
 	//creating donor
 	@Modifying
-	@Query(value="insert into Donor (donor_id,donor_name,email,phone,username,password,add_Id) values"+
+	@Query(value="insert into Donor (donor_id,donor_name,email,phone,username,password,address_id) values"+
 			"(:#{#donor.getDonorId()},:#{#donor.getDonorName()},:#{#donor.getEmail()},:#{#donor.getPhone()},"+
 			":#{#donor.getUsername()},:#{#donor.getPassword()},:#{#donor.getAddress()})",nativeQuery = true)
 	public int createDonor(@Param("donor")Donor donor) throws SQLException;
@@ -52,15 +52,16 @@ public interface DonorDao extends JpaRepository<Donor, Integer>
 	
 	//updating donation box with the donation amount
 	@Modifying
-	@Query(value="update DonationBox d set d.totalMoneyCollection=d.totalMoneyCollection+:#{#donation.getDonation_amount()}")
+	@Query(value="update DonationBox d set d.totalMoneyCollection=d.totalMoneyCollection+:#{#donation.getDonationAmount()}")
 	public int donateToNGO(@Param("donation")Donation donation);
 
 	
 	//adding donation data to donation table
-	@Query(value="insert into Donation (donation_id,donation_amount,donation_date,item_id,donor_id) values"+
-			"(:#{#donation.getDonationId()},:#{#donation.getDonation_amount()},:#{#donation.getDonationDate()},"
-			+":#{#donation.getItem().getItemId()},:#{#donation.getDonor().getDonorId()})",nativeQuery = true)
-	public int addDonation(@Param("donation")Donation donation);
+	@Modifying
+	@Query(value="insert into Donation (donation_Id,donation_Amount,donation_Date,item_id,donor_id) values"+
+			"(:#{#d.getDonationId()},:#{#d.getDonationAmount()},:#{#d.getDonationDate()},"
+			+":#{#d.getItem().getItemId()},:#{#d.getDonor().getDonorId()})",nativeQuery = true)
+	public int addDonation(@Param("d")Donation donation);
 	
 
 	//adding data to DonationItem table

@@ -67,9 +67,9 @@ public class AdminController
 	}
 	
 	//Donation Approval
-	@PutMapping(value="/approveDonation")
-	public ResponseEntity<DonationDistributionStatus> approveDonation(@RequestParam int np_id) {
-		DonationDistributionStatus status = adminService.approveDonation(np_id);
+	@PutMapping(value="/approveDonation/{dd_id}")
+	public ResponseEntity<DonationDistributionStatus> approveDonation(@PathVariable("dd_id")int donation_distribution_id) {
+		DonationDistributionStatus status = adminService.approveDonation(donation_distribution_id);
 		if(status!=null)
 			return new ResponseEntity<DonationDistributionStatus>(status,HttpStatus.OK);
 		else

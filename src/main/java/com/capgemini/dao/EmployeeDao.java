@@ -13,6 +13,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import com.capgemini.model.Address;
+import com.capgemini.model.Donation;
 import com.capgemini.model.DonationDistribution;
 import com.capgemini.model.DonationType;
 import com.capgemini.model.Employee;
@@ -32,8 +33,8 @@ public interface EmployeeDao extends JpaRepository<Employee, Integer>
 		
 	//deleting needy people
 	@Modifying
-	@Query(value="delete NeedyPeople n where n.needyPeopleId=:np_id")
-	public int deleteNeedyPerson(@Param("np_id")int needyPersonId)throws SQLException;
+	@Query(value="delete NeedyPeople n where n.needyPeopleId=?1")
+	public int deleteNeedyPerson(int needyPersonId)throws SQLException;
 
 	
 	//adding address
@@ -44,8 +45,8 @@ public interface EmployeeDao extends JpaRepository<Employee, Integer>
 		
 	//deleting address
 	@Modifying
-	@Query(value="delete Address a where a.addressId=:add_id")
-	public int deleteAddress(@Param("add_id")int add_id)throws SQLException;
+	@Query(value="delete Address a where a.addressId=?1")
+	public int deleteAddress(int add_id)throws SQLException;
 	
 	//login
 	@Query(value="select e.password from Employee e where e.username=?1")
@@ -56,20 +57,26 @@ public interface EmployeeDao extends JpaRepository<Employee, Integer>
 	@Query("update DonationDistribution dd set dd.dateOfDistribution=:#{#distribute.getDateOfDistribution()}")
 	public int helpNeedyPerson(@Param("distribute")DonationDistribution distribute);
 
-	//Extracting DonationDistribution data using needy people id
-	@Query(value="select d from Donation_Distribution d where d.needy_people_id=?1",nativeQuery = true)
-	public DonationDistribution getDonationDistritionByNp_id(int np_id);
+	//updating donation box with the donation amount
+	@Modifying
+	@Query(value="update DonationBox d set d.totalMoneyCollection=d.totalMoneyCollection-:amt")
+	public int deductAmountAfterApproval(@Param("amt")double amount);
+	
+	
+	//extracting DonationDistrition data using Needy person id
+	@Query(value="select d from DonationDistribution d where d.distributionId=:dd_id")
+	public DonationDistribution getDonationDistritionByDd_id(@Param("dd_id")int dd_id);
 	
 	//Extracting Employee data using user name
 	@Query(value="select e from Employee e where e.username=?1")
 	public Optional<Employee> findByUsername(String usernme);
 	
 	//Extracting NeedyPeople data using id
-	@Query(value="select p from NeedyPeople p where np_id=:npid")
+	@Query(value="select p from NeedyPeople p where needyPeopleId=:npid")
 	public Optional<NeedyPeople> readNeedyPeopleById(@Param("npid")int id);
 	
 	//Extracting NeedyPeople data using id
-	@Query(value="select p from NeedyPeople p where np_name=?1")
+	@Query(value="select p from NeedyPeople p where p.needyPeopleName=?1")
 	public List<NeedyPeople> readNeedyPeopleByName(String name);
 	
 	//Extracting all NeedyPeople data

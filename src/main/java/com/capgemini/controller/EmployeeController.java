@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.capgemini.exception.DuplicateNeedyPeopleException;
+import com.capgemini.exception.NoSuchEmployeeException;
 import com.capgemini.exception.NoSuchNeedyPeopleException;
 import com.capgemini.exception.WrongCredentialsException;
 import com.capgemini.model.NeedyPeople;
@@ -39,7 +40,7 @@ public class EmployeeController
 	
 	//login
 	@GetMapping(value="/login")
-	public ResponseEntity<HttpStatus> login(@RequestParam String username,@RequestParam String password) throws NoSuchNeedyPeopleException, WrongCredentialsException {
+	public ResponseEntity<HttpStatus> login(@RequestParam String username,@RequestParam String password) throws WrongCredentialsException, NoSuchEmployeeException {
 		if(employeeService.login(username,password))
 			return new ResponseEntity<HttpStatus>(HttpStatus.OK);
 		else 
@@ -67,9 +68,9 @@ public class EmployeeController
 	}
 	
 	//Help Needy People
-	@PutMapping(value="/helpNeedyPeople/{np_id}")
-	public ResponseEntity<String> helpNeedyPerson(@PathVariable("np_id")int np_id) {
-		String s=employeeService.helpNeedyPerson(np_id);
+	@PutMapping(value="/helpNeedyPeople/{dd_id}")
+	public ResponseEntity<String> helpNeedyPerson(@PathVariable("dd_id")int dd_id) {
+		String s=employeeService.helpNeedyPerson(dd_id);
 		if(s!=null)
 			return new ResponseEntity<String>(s,HttpStatus.OK);
 		else

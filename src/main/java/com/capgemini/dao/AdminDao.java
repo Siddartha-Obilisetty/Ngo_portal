@@ -25,7 +25,7 @@ public interface AdminDao extends JpaRepository<Admin, Integer>
 	@Modifying
 	@Query(value="insert into Employee (employee_id,employee_name,email,phone,username,password,address_id)"+
 			"values (:#{#emp.getEmployeeId()},:#{#emp.getEmployeeName()},:#{#emp.getEmail()},"+
-			":#{#emp.getPhone()},:#{#emp.getUsername()},:#{#emp.getPassword()},:#{#emp.getAddress().getAddressId()},"+
+			":#{#emp.getPhone()},:#{#emp.getUsername()},:#{#emp.getPassword()},:#{#emp.getAddress().getAddressId()}"+
 			")",nativeQuery = true)
 	public int createEmployee(@Param("emp")Employee employee)throws SQLException;
 	
@@ -61,14 +61,14 @@ public interface AdminDao extends JpaRepository<Admin, Integer>
 	
 	//modifying DonationDistribution
 	@Modifying
-	@Query(value="update Donation_Distribution d set d.status=:#{#dd.getStatus()},"+
-			"d.approval_Or_RejectedDate=:#{#dd.getApprovalOrRejectedDate()} where d.distribution_Id="+
-			":#{#dd.getDistributionid()}",nativeQuery = true)
+	@Query(value="update Donation_Distribution set status=:#{#dd.getStatus()},"+
+			"approval_Or_Rejected_Date=:#{#dd.getApprovalOrRejectedDate()} where distribution_Id="+
+			":#{#dd.getDistributionId()}",nativeQuery = true)
 	public int approveDonation(@Param("dd")DonationDistribution distribution);
 	
 	//extracting DonationDistrition data using Needy person id
-	@Query(value="select d from Donation_Distribution d where d.needy_people_id=?1",nativeQuery = true)
-	public DonationDistribution getDonationDistritionByNp_id(int np_id);
+	@Query(value="select d from DonationDistribution d where d.distributionId=:dd_id")
+	public DonationDistribution getDonationDistritionByDd_id(@Param("dd_id")int dd_id);
 	
 	//extracting Employee data using employee id
 	@Query(value="select e from Employee e where e.employeeId=?1")

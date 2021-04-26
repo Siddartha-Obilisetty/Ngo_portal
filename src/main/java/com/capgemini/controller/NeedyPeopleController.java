@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -52,9 +53,10 @@ public class NeedyPeopleController
 	}
 	
 	//request for help
-	@PutMapping(value="/request",consumes="application/json")
-	public ResponseEntity<HttpStatus> requestForHelp(@RequestParam int np_id) {
-		if(needyPeopleService.requestForHelp(np_id))
+	@PutMapping(value="/request/{npId}",consumes="application/json")
+	public ResponseEntity<HttpStatus> requestForHelp(@PathVariable("npId") int npId) {
+		System.out.println(npId);
+		if(needyPeopleService.requestForHelp(npId))
 			return new ResponseEntity<HttpStatus>(HttpStatus.OK);
 		else
 			return new ResponseEntity<HttpStatus>(HttpStatus.EXPECTATION_FAILED);

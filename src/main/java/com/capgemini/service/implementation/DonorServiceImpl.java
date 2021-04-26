@@ -16,6 +16,7 @@ import com.capgemini.exception.NoSuchNeedyPeopleException;
 import com.capgemini.exception.WrongCredentialsException;
 import com.capgemini.model.Address;
 import com.capgemini.model.Donation;
+import com.capgemini.model.DonationItem;
 import com.capgemini.model.Donor;
 import com.capgemini.model.NeedyPeople;
 import com.capgemini.service.DonorService;
@@ -73,17 +74,16 @@ public class DonorServiceImpl implements DonorService
 	//login
 	@Transactional
 	@Override
-	public boolean login(String username, String password) throws NoSuchNeedyPeopleException, WrongCredentialsException {
+	public boolean login(String username, String password) throws NoSuchDonorException, WrongCredentialsException {
 		Optional<Donor> d = donorDao.findByUsername(username);
 		if(d.isPresent()) {
-			Donor donor=d.get();
-			if(donor.getPassword().equals(donorDao.login(username)))
+			if(password.equals(donorDao.login(username)))
 				return true;
 			else
 				throw new WrongCredentialsException();
 		}
 		else {
-			throw new NoSuchNeedyPeopleException(username);
+			throw new NoSuchDonorException(username);
 		}
 		
 	}
@@ -121,7 +121,10 @@ public class DonorServiceImpl implements DonorService
 	@Transactional
 	@Override
 	public boolean donateToNGO(Donation donation) {
-		donorDao.addDonationItem(donation.getItem());
+		DonationItem di = new DonationItem();
+		di.setItemDescription(donation.getItem().getItemDescription());
+		di.setType(donation.getItem().getType());
+		donorDao.addDonationItem(di);
 		donorDao.addDonation(donation);
 		sendThankyouMailToDonator(donation.getDonor().getEmail());
 		int i=donorDao.donateToNGO(donation);

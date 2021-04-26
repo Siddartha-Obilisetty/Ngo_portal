@@ -12,7 +12,7 @@ public interface DonorService
 {
 	//methods to be implemented
 	public boolean registerDonor(Donor donor) throws DuplicateDonorException;
-	public 	boolean login(String username, String password) throws NoSuchNeedyPeopleException, WrongCredentialsException;
+	public 	boolean login(String username, String password) throws WrongCredentialsException, NoSuchDonorException;
 	public boolean donateToNGO(Donation donation);
 	public void sendThankyouMailToDonator(String email);
 	public String forgotPassword(String username) throws WrongCredentialsException;

@@ -38,7 +38,7 @@ public class EmployeeServiceImpl implements EmployeeService
 	//login
 	@Transactional(readOnly = true)
 	@Override
-	public boolean login(String username, String password) throws NoSuchNeedyPeopleException, WrongCredentialsException {
+	public boolean login(String username, String password) throws NoSuchEmployeeException, WrongCredentialsException {
 		Optional<Employee> e = employeeDao.findByUsername(username);
 		if(e.isPresent())
 			if(password.equals(employeeDao.login(username)))
@@ -46,7 +46,7 @@ public class EmployeeServiceImpl implements EmployeeService
 			else
 				throw new WrongCredentialsException();
 		else 
-			throw new NoSuchNeedyPeopleException(username);		
+			throw new NoSuchEmployeeException(username);		
 	}
 
 	//adding needy person
@@ -128,14 +128,18 @@ public class EmployeeServiceImpl implements EmployeeService
 	//help needy person
 	@Override
 	@Transactional
-	public String helpNeedyPerson(int np_id) {
-		DonationDistribution dd = employeeDao.getDonationDistritionByNp_id(np_id);
+	public String helpNeedyPerson(int dd_id) {
+		DonationDistribution dd = employeeDao.getDonationDistritionByDd_id(dd_id);
 		if(dd.getStatus().equals(DonationDistributionStatus.APPROVED))
 		{
 			dd.setDateOfDistribution(LocalDate.now());
 			int i=employeeDao.helpNeedyPerson(dd);
 			if(i!=0)
+			{
+				employeeDao.deductAmountAfterApproval(dd.getAmountDistributed());
 				return "Approved and Amount Deducted";
+			
+			}
 			return "Status not updated";
 		}
 		else if(dd.getStatus().equals(DonationDistributionStatus.REJECTED))

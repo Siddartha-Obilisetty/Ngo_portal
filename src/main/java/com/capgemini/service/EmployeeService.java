@@ -16,7 +16,7 @@ import com.capgemini.model.NeedyPeople;
 public interface EmployeeService 
 {
 	//methods to be implemented
-	public boolean login(String username, String password) throws NoSuchNeedyPeopleException, WrongCredentialsException;
+	public boolean login(String username, String password) throws NoSuchEmployeeException, WrongCredentialsException;
 	public boolean addNeedyPerson(NeedyPeople person) throws DuplicateNeedyPeopleException;
 	public boolean removeNeedyPerson(int needyPersonId) throws NoSuchNeedyPeopleException;
 	public NeedyPeople findNeedyPeopleById(int id) throws NoSuchNeedyPeopleException;

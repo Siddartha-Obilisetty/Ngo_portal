@@ -41,7 +41,7 @@ public interface NeedyPeopleDao  extends JpaRepository<NeedyPeople, Integer>
 
 	//updating NeedyPeople setting request flag
 	@Modifying
-	@Query(value="update NeedyPeople np set np.request=:request where np.needy_people_id=:np_id ",nativeQuery = true)
+	@Query(value="update Needy_People np set np.request=:request where np.needy_people_id=:np_id ",nativeQuery = true)
 	public int requestForHelp(@Param("request")int request, @Param("np_id")int np_id);
 	
 	//adding data into DonationDistribution table
@@ -53,9 +53,9 @@ public interface NeedyPeopleDao  extends JpaRepository<NeedyPeople, Integer>
 	
 	//adding data to DonationItem table
 	@Modifying
-	@Query(value="insert into Donation_Item (item_id,item_description,type) values (:#{#item.getItemId()},"+
-			":#{#item.getItemDescription()},:#{#item.getType()})",nativeQuery = true)
-	public int addDonationItem(@Param("item")DonationItem item);
+	@Query(value="insert into Donation_Item (item_id,item_description,type) values (:#{#ditem.getItemId()},"+
+			":#{#ditem.getItemDescription()},:#{#ditem.getType()})",nativeQuery = true)
+	public int addDonationItem(@Param("ditem")DonationItem item);
 	
 	//extracting needy people data using user name 
 	@Query(value="select n from NeedyPeople n where n.username=:username")
@@ -64,5 +64,6 @@ public interface NeedyPeopleDao  extends JpaRepository<NeedyPeople, Integer>
 	//extracting employee data using employee id
 	@Query(value="select e from Employee e where e.employeeId=?1")
 	public Optional<Employee> getEmployeeById(int employeeId);
+	
 	
 }
