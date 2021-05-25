@@ -3,6 +3,7 @@ package com.capgemini.service.implementation;
 //imports
 
 import java.sql.SQLException;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -74,11 +75,11 @@ public class DonorServiceImpl implements DonorService
 	//login
 	@Transactional
 	@Override
-	public boolean login(String username, String password) throws NoSuchDonorException, WrongCredentialsException {
+	public Optional<Donor> login(String username, String password) throws NoSuchDonorException, WrongCredentialsException {
 		Optional<Donor> d = donorDao.findByUsername(username);
 		if(d.isPresent()) {
 			if(password.equals(donorDao.login(username)))
-				return true;
+				return d;
 			else
 				throw new WrongCredentialsException();
 		}
@@ -107,13 +108,13 @@ public class DonorServiceImpl implements DonorService
 		Optional<Donor> d=donorDao.findByUsername(username);
 		if(d.isEmpty())
 			throw new WrongCredentialsException();
-		if(d.get().getPassword().equals(oldPassword))
+		if(!(d.get().getPassword().equals(oldPassword)))
 		{
-			donorDao.resetPassword(username,newPassword);
-			return "Your password has been Changed";
+			throw new WrongCredentialsException();
 		}
 		else {
-			return "Wrong Password";
+			donorDao.resetPassword(username,newPassword);
+			return "Your password has been Changed";
 		}
 	}	
 
@@ -121,16 +122,20 @@ public class DonorServiceImpl implements DonorService
 	@Transactional
 	@Override
 	public boolean donateToNGO(Donation donation) {
-		DonationItem di = new DonationItem();
-		di.setItemDescription(donation.getItem().getItemDescription());
-		di.setType(donation.getItem().getType());
-		donorDao.addDonationItem(di);
-		donorDao.addDonation(donation);
 		sendThankyouMailToDonator(donation.getDonor().getEmail());
+		donorDao.addDonationItem(donation.getItem());
+		donorDao.addDonation(donation);
 		int i=donorDao.donateToNGO(donation);
 		if(i!=0)
 			return true;
 		return false;
+	}
+	
+	@Transactional(readOnly = true)
+	@Override
+	public Optional<List<Donation>> getDonationByDonorId(int donorId){
+		return donorDao.getDonationByDonorId(donorId);
+		
 	}
 	
 	//sending thank you mail

@@ -5,6 +5,7 @@ package com.capgemini.dao;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -70,6 +71,8 @@ public interface DonorDao extends JpaRepository<Donor, Integer>
 			":#{#item.getItemDescription()},:#{#item.getType()})",nativeQuery = true)
 	public int addDonationItem(@Param("item")DonationItem item);
 	
+	@Query(value="select d from Donation d where d.donor.donorId=:donorId")
+	public Optional<List<Donation>> getDonationByDonorId(@Param("donorId")int donorId);
 	
 	//Extracting Donor data using user name
 	@Query(value="select d from Donor d where d.username=?1")

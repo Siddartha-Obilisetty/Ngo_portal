@@ -46,24 +46,26 @@ public interface NeedyPeopleDao  extends JpaRepository<NeedyPeople, Integer>
 	
 	//adding data into DonationDistribution table
 	@Modifying
-	@Query(value="insert into Donation_Distribution (distribution_id,amount_distributed,status,item_id,needy_people_id,employee_id)"
+	@Query(value="insert into Donation_Distribution (distribution_id,amount_distributed,status,item_id,needy_people_id)"
 			+"values (:#{#dd.getDistributionId()},:#{#dd.getAmountDistributed()},:#{#dd.getStatus()},:#{#dd.getDonationItem().getItemId()},"
-			+":#{#dd.getNeedyPeople().getNeedyPeopleId()},:#{#dd.getEmployee().getEmployeeId()})",nativeQuery = true)
+			+":#{#dd.getNeedyPeople().getNeedyPeopleId()})",nativeQuery = true)
 	public int addDonationDistribution(@Param("dd")DonationDistribution donationDistribution);
 	
 	//adding data to DonationItem table
-	@Modifying
-	@Query(value="insert into Donation_Item (item_id,item_description,type) values (:#{#ditem.getItemId()},"+
-			":#{#ditem.getItemDescription()},:#{#ditem.getType()})",nativeQuery = true)
-	public int addDonationItem(@Param("ditem")DonationItem item);
-	
+//	@Modifying
+//	@Query(value="insert into Donation_Item (item_id,item_description,type) values (:#{#ditem.getItemId()},"+
+//			":#{#ditem.getItemDescription()},:#{#ditem.getType()})",nativeQuery = true)
+//	public int addDonationItem(@Param("ditem")DonationItem item);
+//	
+	@Query(value="select d.distributionId from DonationDistribution d order by d.distributionId")
+	public Optional<List<Integer>> getDistributionId();
 	//extracting needy people data using user name 
 	@Query(value="select n from NeedyPeople n where n.username=:username")
 	public Optional<NeedyPeople> getByUsername(@Param("username")String username);
 	
-	//extracting employee data using employee id
-	@Query(value="select e from Employee e where e.employeeId=?1")
-	public Optional<Employee> getEmployeeById(int employeeId);
-	
+//	//extracting employee data using employee id
+//	@Query(value="select e from Employee e where e.employeeId=?1")
+//	public Optional<Employee> getEmployeeById(int employeeId);
+//	
 	
 }

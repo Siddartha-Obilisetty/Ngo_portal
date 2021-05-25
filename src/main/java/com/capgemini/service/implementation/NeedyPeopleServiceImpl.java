@@ -32,6 +32,7 @@ public class NeedyPeopleServiceImpl implements NeedyPeopleService
 	@Autowired
 	NeedyPeopleDao needyPeople;
 
+	
 	public void setNeedyPeople(NeedyPeopleDao needyPeople) {
 		this.needyPeople = needyPeople;
 	}
@@ -59,12 +60,12 @@ public class NeedyPeopleServiceImpl implements NeedyPeopleService
 	//login
 	@Transactional(readOnly = true)
 	@Override
-	public boolean login(String username, String password) throws NoSuchNeedyPeopleException, WrongCredentialsException 
+	public Optional<NeedyPeople> login(String username, String password) throws NoSuchNeedyPeopleException, WrongCredentialsException 
 	{
 		Optional<NeedyPeople> n = getByUsername(username);
 		if(n.isPresent()) {
 			if(password.equals(needyPeople.readLoginData(username)))
-				return true;
+				return n;
 			else
 				throw new WrongCredentialsException();
 		}
@@ -87,16 +88,14 @@ public class NeedyPeopleServiceImpl implements NeedyPeopleService
 		di.setItemDescription("money");
 		
 		DonationDistribution dd = new DonationDistribution();
-		//dd.setDistributionId(1);
+		dd.setDistributionId(this.getDistributionId());
 		dd.setNeedyPeople(np);
-		dd.setAmountDistributed(500);
+		dd.setAmountDistributed(1000);
 		dd.setStatus(DonationDistributionStatus.PENDING);
 		dd.setDonationItem(di);
-		dd.setEmployee(needyPeople.getEmployeeById(501).get());
-		if(needyPeople.addDonationItem(di)!=0)
-			if(needyPeople.addDonationDistribution(dd)!=0)
-				if(needyPeople.requestForHelp(np.getRequest(), np_id)!=0)
-					return true;
+		if(needyPeople.addDonationDistribution(dd)!=0)
+			if(needyPeople.requestForHelp(np.getRequest(), np_id)!=0)
+				return true;
 		return false;
 	}
 
@@ -105,6 +104,23 @@ public class NeedyPeopleServiceImpl implements NeedyPeopleService
 	@Override
 	public Optional<NeedyPeople> getByUsername(String username) {
 		return needyPeople.getByUsername(username);
+	}
+	
+	@Transactional(readOnly = true)
+	@Override
+	public int getDistributionId() {
+		Optional<List<Integer>> list=needyPeople.getDistributionId();
+		int distributionId=1;
+		if(list.isEmpty()) {
+			return distributionId;
+		}
+		else if(list.get().size()==0) {
+			return distributionId;
+		}
+		else {
+			List<Integer> l=list.get();
+			return l.get(l.size()-1)+1;
+		}
 	}
 
 }

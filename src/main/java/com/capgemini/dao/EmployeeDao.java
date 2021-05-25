@@ -54,7 +54,7 @@ public interface EmployeeDao extends JpaRepository<Employee, Integer>
 	
 	//updating date of distribution in DonationDistribution table
 	@Modifying
-	@Query("update DonationDistribution dd set dd.dateOfDistribution=:#{#distribute.getDateOfDistribution()}")
+	@Query("update DonationDistribution dd set dd.dateOfDistribution=:#{#distribute.getDateOfDistribution()},dd.employee=:#{#distribute.getEmployee()}")
 	public int helpNeedyPerson(@Param("distribute")DonationDistribution distribute);
 
 	//updating donation box with the donation amount
@@ -64,8 +64,8 @@ public interface EmployeeDao extends JpaRepository<Employee, Integer>
 	
 	
 	//extracting DonationDistrition data using Needy person id
-	@Query(value="select d from DonationDistribution d where d.distributionId=:dd_id")
-	public DonationDistribution getDonationDistritionByDd_id(@Param("dd_id")int dd_id);
+	@Query(value="select d from DonationDistribution d where d.needyPeople.needyPeopleId=:np_id")
+	public List<DonationDistribution> getDonationDistritionByNp_id(@Param("np_id")int np_id);
 	
 	//Extracting Employee data using user name
 	@Query(value="select e from Employee e where e.username=?1")

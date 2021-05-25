@@ -16,13 +16,13 @@ import com.capgemini.model.NeedyPeople;
 public interface EmployeeService 
 {
 	//methods to be implemented
-	public boolean login(String username, String password) throws NoSuchEmployeeException, WrongCredentialsException;
+	public Optional<Employee> login(String username, String password) throws NoSuchEmployeeException, WrongCredentialsException;
 	public boolean addNeedyPerson(NeedyPeople person) throws DuplicateNeedyPeopleException;
 	public boolean removeNeedyPerson(int needyPersonId) throws NoSuchNeedyPeopleException;
 	public NeedyPeople findNeedyPeopleById(int id) throws NoSuchNeedyPeopleException;
 	public List<NeedyPeople> findNeedyPeopleByName(String name) throws NoSuchNeedyPeopleException;
 	public List<NeedyPeople> findAllNeedyPeople();
-	public String helpNeedyPerson(int np_id);
+	public String helpNeedyPerson(int empid, int np_id);
 	public boolean removeAddress(int add_Id);
 	public boolean addAddress(Address a);
 

@@ -14,6 +14,7 @@ import com.capgemini.model.Address;
 import com.capgemini.model.Admin;
 import com.capgemini.model.DonationDistribution;
 import com.capgemini.model.DonationDistributionStatus;
+import com.capgemini.model.Donor;
 import com.capgemini.model.Employee;
 
 //Repository class
@@ -70,6 +71,9 @@ public interface AdminDao extends JpaRepository<Admin, Integer>
 	@Query(value="select d from DonationDistribution d where d.distributionId=:dd_id")
 	public DonationDistribution getDonationDistritionByDd_id(@Param("dd_id")int dd_id);
 	
+	@Query(value="select d from DonationDistribution d")
+	public List<DonationDistribution> getAllDonationDistrition()throws SQLException;
+	
 	//extracting Employee data using employee id
 	@Query(value="select e from Employee e where e.employeeId=?1")
 	public Employee readEmployeeById(int employeeId)throws SQLException;
@@ -81,5 +85,11 @@ public interface AdminDao extends JpaRepository<Admin, Integer>
 	//extracting Employee data
 	@Query(value="select e from Employee e")
 	public List<Employee> readAllEmployees()throws SQLException;
+
+	@Query(value="select d from Donor d")
+	public List<Donor> readAllDonors()throws SQLException;
+
+	@Query(value="select d from Donor d where d.donorId=?1")
+	public Donor readDonorById(int donorid)throws SQLException;
 		
 }

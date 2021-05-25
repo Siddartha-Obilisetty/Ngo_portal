@@ -8,6 +8,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -22,11 +23,12 @@ import com.capgemini.exception.DuplicateNeedyPeopleException;
 import com.capgemini.exception.NoSuchEmployeeException;
 import com.capgemini.exception.NoSuchNeedyPeopleException;
 import com.capgemini.exception.WrongCredentialsException;
+import com.capgemini.model.Employee;
 import com.capgemini.model.NeedyPeople;
 import com.capgemini.service.EmployeeService;
 
 //Employee Controleer class
-
+@CrossOrigin(origins = "http://localhost:4242")
 @RestController
 @RequestMapping(value="/employee")
 public class EmployeeController 
@@ -40,11 +42,12 @@ public class EmployeeController
 	
 	//login
 	@GetMapping(value="/login")
-	public ResponseEntity<HttpStatus> login(@RequestParam String username,@RequestParam String password) throws WrongCredentialsException, NoSuchEmployeeException {
-		if(employeeService.login(username,password))
-			return new ResponseEntity<HttpStatus>(HttpStatus.OK);
+	public ResponseEntity<Employee> login(@RequestParam String username,@RequestParam String password) throws WrongCredentialsException, NoSuchEmployeeException {
+		Optional<Employee> emp = employeeService.login(username, password); 
+		if(emp.isPresent())
+			return new ResponseEntity<Employee>(emp.get(),HttpStatus.OK);
 		else 
-        	return new ResponseEntity<HttpStatus>(HttpStatus.NOT_ACCEPTABLE);
+        	return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
 	}
 	
 	//Add Needy People
@@ -68,9 +71,9 @@ public class EmployeeController
 	}
 	
 	//Help Needy People
-	@PutMapping(value="/helpNeedyPeople/{dd_id}")
-	public ResponseEntity<String> helpNeedyPerson(@PathVariable("dd_id")int dd_id) {
-		String s=employeeService.helpNeedyPerson(dd_id);
+	@PutMapping(value="/{empid}/helpNeedyPeople/{np_id}")
+	public ResponseEntity<String> helpNeedyPerson(@PathVariable("empid")int empid,@PathVariable("np_id")int np_id) {
+		String s=employeeService.helpNeedyPerson(empid,np_id);
 		if(s!=null)
 			return new ResponseEntity<String>(s,HttpStatus.OK);
 		else

@@ -1,5 +1,7 @@
 package com.capgemini.service;
 
+import java.util.List;
+
 //imports
 
 import java.util.Optional;
@@ -16,7 +18,7 @@ public interface NeedyPeopleService
 	//methods to be implemented
 	public boolean registerNeedyPerson(NeedyPeople person) throws DuplicateNeedyPeopleException;
 	public boolean requestForHelp(int np_id);
-	public boolean login(String username, String password) throws NoSuchNeedyPeopleException, WrongCredentialsException;
+	public Optional<NeedyPeople> login(String username, String password) throws NoSuchNeedyPeopleException, WrongCredentialsException;
 	public Optional<NeedyPeople> getByUsername(String username);
-
+	public int getDistributionId();
 }

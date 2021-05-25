@@ -38,11 +38,11 @@ public class EmployeeServiceImpl implements EmployeeService
 	//login
 	@Transactional(readOnly = true)
 	@Override
-	public boolean login(String username, String password) throws NoSuchEmployeeException, WrongCredentialsException {
+	public Optional<Employee> login(String username, String password) throws NoSuchEmployeeException, WrongCredentialsException {
 		Optional<Employee> e = employeeDao.findByUsername(username);
 		if(e.isPresent())
 			if(password.equals(employeeDao.login(username)))
-				return true;
+				return e;
 			else
 				throw new WrongCredentialsException();
 		else 
@@ -128,25 +128,29 @@ public class EmployeeServiceImpl implements EmployeeService
 	//help needy person
 	@Override
 	@Transactional
-	public String helpNeedyPerson(int dd_id) {
-		DonationDistribution dd = employeeDao.getDonationDistritionByDd_id(dd_id);
-		if(dd.getStatus().equals(DonationDistributionStatus.APPROVED))
-		{
-			dd.setDateOfDistribution(LocalDate.now());
-			int i=employeeDao.helpNeedyPerson(dd);
-			if(i!=0)
+	public String helpNeedyPerson(int empid,int np_id) {
+		List<DonationDistribution> ddl = employeeDao.getDonationDistritionByNp_id(np_id);
+		String result="";
+		for(DonationDistribution dd:ddl) {
+			dd.setEmployee(employeeDao.findById(empid).get());
+			if(dd.getStatus().equals(DonationDistributionStatus.APPROVED))
 			{
-				employeeDao.deductAmountAfterApproval(dd.getAmountDistributed());
-				return "Approved and Amount Deducted";
-			
+				dd.setDateOfDistribution(LocalDate.now());
+				int i=employeeDao.helpNeedyPerson(dd);
+				if(i!=0)
+				{
+					employeeDao.deductAmountAfterApproval(dd.getAmountDistributed());
+					result+="Approved_and_Amount_Deducted\n";
+				}
+				return "Status_not_updated";
 			}
-			return "Status not updated";
+			else if(dd.getStatus().equals(DonationDistributionStatus.REJECTED))
+			{			
+				result+="Rejected\n";
+			}
+			result+="Pending\n";
 		}
-		else if(dd.getStatus().equals(DonationDistributionStatus.REJECTED))
-		{			
-			return "Rejected";
-		}
-		return "Pending";
+		return result;
 	}
 	
 	

@@ -1,8 +1,9 @@
 package com.capgemini.model;
 
+
 //imports
 
-import java.util.Date;
+import java.time.LocalDate;
 import javax.persistence.*;
 
 import org.hibernate.annotations.Type;
@@ -20,7 +21,7 @@ public class Donation
 	private double donationAmount;
 	
 	@Column(name="donation_date")
-	private Date donationDate;
+	private LocalDate donationDate;
 	
 	//OneToOne Unidirectional Mapping
 	@OneToOne
@@ -35,7 +36,7 @@ public class Donation
 	public Donation() {}	//no parameter constructor
 	
 	//Parameterized constructor
-	public Donation(int donationId, double donationAmount, Date donationDate, DonationItem item, Donor donor) {
+	public Donation(int donationId, double donationAmount, LocalDate donationDate, DonationItem item, Donor donor) {
 		this.donationId = donationId;		this.donationAmount = donationAmount;
 		this.donationDate = donationDate;	this.item = item;
 		this.donor = donor;
@@ -59,11 +60,11 @@ public class Donation
 		this.donationAmount = donationAmount;
 	}
 
-	public Date getDonationDate() {
+	public LocalDate getDonationDate() {
 		return donationDate;
 	}
 
-	public void setDonationDate(Date donationDate) {
+	public void setDonationDate(LocalDate donationDate) {
 		this.donationDate = donationDate;
 	}
 

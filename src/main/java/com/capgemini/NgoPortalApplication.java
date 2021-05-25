@@ -12,9 +12,4 @@ public class NgoPortalApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(NgoPortalApplication.class, args);
 	}
-	
-	/*
-	 * @Bean public DonationBox donationBox() { return new
-	 * DonationBox("Sprint NGO","1234","xxxxxxxxxxxx2021",100000.0,0,0,0,0); }
-	 */
 }

@@ -105,7 +105,7 @@ public class DonorTest
 		Address ad = new Address(1011,"hyd","telangana","1234567891","kkt");
 		Donor d = new Donor(125,"Akhil","akhi31@gmail.com","1122334455","sahithi","sahithi", ad);
 		DonationItem di=new  DonationItem(1,"money",DonationType.MONEY);
-		Donation dt=new Donation(101,1000.0,Date.valueOf(LocalDate.now()),di,d);
+		Donation dt=new Donation(101,1000.0,LocalDate.now(),di,d);
 		when(donorDao.donateToNGO(dt)).thenReturn(1);
 		assertEquals(true,donorService.donateToNGO(dt));
 	}
