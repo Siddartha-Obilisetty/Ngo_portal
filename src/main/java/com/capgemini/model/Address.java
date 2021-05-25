@@ -1,12 +1,16 @@
 package com.capgemini.model;
 
+//imports
+
 import javax.persistence.*;
+
+//Entity class
 
 @Entity
 public class Address 
-{
+{	
 	@Id
-	@Column(name="address_id")
+	@Column(name = "address_id")
 	private int addressId;
 	
 	private String city;
@@ -17,21 +21,26 @@ public class Address
 	
 	private String landmark;
 	
+	public Address() {}		//no parameter constructor
 	
-	public Address() {}
+	//Parameterized constructor
 	public Address(int addressId, String city, String state, String pin, String landmark) {
-		this.addressId = addressId;
-		this.city = city;
-		this.state = state;
-		this.pin = pin;
+		this.addressId = addressId;		this.city = city;
+		this.state = state;				this.pin = pin;
 		this.landmark = landmark;
 	}
+
+
+	//Getters and Setters
+	
 	public int getAddressId() {
 		return addressId;
 	}
+
 	public void setAddressId(int addressId) {
 		this.addressId = addressId;
 	}
+
 	public String getCity() {
 		return city;
 	}
@@ -55,6 +64,14 @@ public class Address
 	}
 	public void setLandmark(String landmark) {
 		this.landmark = landmark;
+	}
+	
+	//ToString
+
+	@Override
+	public String toString() {
+		return "Address [addressId=" + addressId + ", city=" + city + ", state=" + state + ", pin=" + pin + ", landmark="
+				+ landmark + "]";
 	}
 	
 

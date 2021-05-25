@@ -1,22 +1,29 @@
 package com.capgemini.service;
 
-import java.util.List;
+//imports
 
-import com.capgemini.exception.DuplicateNeedyPeopleException;
-import com.capgemini.exception.NoSuchEmployeeException;
-import com.capgemini.exception.NoSuchNeedyPeopleException;
+import java.util.List;
+import java.util.Optional;
+
+import com.capgemini.exception.*;
+import com.capgemini.model.Address;
 import com.capgemini.model.DonationDistribution;
 import com.capgemini.model.Employee;
 import com.capgemini.model.NeedyPeople;
 
+//Service interface
+
 public interface EmployeeService 
 {
-	public boolean login(Employee employee)throws NoSuchEmployeeException;
+	//methods to be implemented
+	public Optional<Employee> login(String username, String password) throws NoSuchEmployeeException, WrongCredentialsException;
 	public boolean addNeedyPerson(NeedyPeople person) throws DuplicateNeedyPeopleException;
-	public boolean removeNeedyPerson(NeedyPeople person) throws NoSuchNeedyPeopleException;
+	public boolean removeNeedyPerson(int needyPersonId) throws NoSuchNeedyPeopleException;
 	public NeedyPeople findNeedyPeopleById(int id) throws NoSuchNeedyPeopleException;
 	public List<NeedyPeople> findNeedyPeopleByName(String name) throws NoSuchNeedyPeopleException;
 	public List<NeedyPeople> findAllNeedyPeople();
-	public String helpNeedyPerson(DonationDistribution distribute);
+	public String helpNeedyPerson(int empid, int np_id);
+	public boolean removeAddress(int add_Id);
+	public boolean addAddress(Address a);
 
 }

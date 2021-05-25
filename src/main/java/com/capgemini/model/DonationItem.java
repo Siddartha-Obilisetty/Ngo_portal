@@ -1,43 +1,71 @@
 package com.capgemini.model;
 
+//imports
+
 import javax.persistence.*;
 
+import org.hibernate.annotations.Type;
+
+//Entity class
+
 @Entity
+@Table(name="donation_item")
 public class DonationItem 
 {
 	@Id
-	@Column(name="item_id")
+	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator = "seq_gen")
+	@SequenceGenerator(name = "seq_gen",initialValue = 1)
+	@Column(name="item_id",unique = true,updatable = false,nullable = false)
 	private int itemId;
 	
-	@Column(name="item_desc")
+	@Column(name="item_description")
 	private String itemDescription;
 	
-	@Column(name = "donation_type")
-	private DonationType donationType;
+	//enum class
+	@Enumerated(EnumType.STRING)
+	@Type(type = "com.capgemini.model.DonationType")
+	private DonationType type;
 	
-	public DonationItem() {}
+	public DonationItem() {}	//no parameter constructor
+
+	//Parameterized constructor
 	
-	public DonationItem(int itemId, String itemDescription, DonationType donationType) {
-		this.itemId = itemId;
-		this.itemDescription = itemDescription;
-		this.donationType = donationType;
+	public DonationItem(int itemId, String itemDescription, DonationType type) {
+		this.itemId = itemId;	this.itemDescription = itemDescription;
+		this.type = type;
 	}
+
+	//Getters and Setters
+	
 	public int getItemId() {
 		return itemId;
 	}
+
 	public void setItemId(int itemId) {
 		this.itemId = itemId;
 	}
+
 	public String getItemDescription() {
 		return itemDescription;
 	}
+
 	public void setItemDescription(String itemDescription) {
 		this.itemDescription = itemDescription;
 	}
-	public DonationType getDonationType() {
-		return donationType;
+
+	public DonationType getType() {
+		return type;
 	}
-	public void setDonationType(DonationType donationType) {
-		this.donationType = donationType;
+
+	public void setType(DonationType type) {
+		this.type = type;
 	}
+
+	//ToString
+	
+	@Override
+	public String toString() {
+		return "DonationItem [itemId=" + itemId + ", itemDescription=" + itemDescription + ", type=" + type + "]";
+	}
+	
 }

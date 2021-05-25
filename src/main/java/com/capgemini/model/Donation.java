@@ -1,7 +1,14 @@
 package com.capgemini.model;
 
-import java.util.Date;
+
+//imports
+
+import java.time.LocalDate;
 import javax.persistence.*;
+
+import org.hibernate.annotations.Type;
+
+//Entity class
 
 @Entity
 public class Donation 
@@ -10,58 +17,80 @@ public class Donation
 	@Column(name="donation_id")
 	private int donationId;
 	
-	private DonationItem item;
-	
 	@Column(name="donation_amount")
 	private double donationAmount;
 	
 	@Column(name="donation_date")
-	private Date donationDate;
+	private LocalDate donationDate;
 	
-	@ManyToOne
+	//OneToOne Unidirectional Mapping
+	@OneToOne
+	@JoinColumn(name = "item_id")
+	private DonationItem item;
+	
+	//OneToOne Unidirectional Mapping
+	@OneToOne
 	@JoinColumn(name = "donor_id")
 	private Donor donor;
 	
-	public Donation() {}
+	public Donation() {}	//no parameter constructor
 	
-	public Donation(int donationId, Donor donor, DonationItem item, double donationAmount, Date donationDate) {
-		this.donationId = donationId;
-		this.item = item;
-		this.donationAmount = donationAmount;
-		this.donationDate = donationDate;
+	//Parameterized constructor
+	public Donation(int donationId, double donationAmount, LocalDate donationDate, DonationItem item, Donor donor) {
+		this.donationId = donationId;		this.donationAmount = donationAmount;
+		this.donationDate = donationDate;	this.item = item;
 		this.donor = donor;
-
 	}
+
+	//Getters and Setters
+	
 	public int getDonationId() {
 		return donationId;
 	}
+
 	public void setDonationId(int donationId) {
 		this.donationId = donationId;
 	}
-	public Donor getDonor() {
-		return donor;
-	}
-	public void setDonor(Donor donor) {
-		this.donor = donor;
-	}
-	public DonationItem getItem() {
-		return item;
-	}
-	public void setItem(DonationItem item) {
-		this.item = item;
-	}
+
 	public double getDonationAmount() {
 		return donationAmount;
 	}
+
 	public void setDonationAmount(double donationAmount) {
 		this.donationAmount = donationAmount;
 	}
-	public Date getDonationDate() {
+
+	public LocalDate getDonationDate() {
 		return donationDate;
 	}
-	public void setDonationDate(Date donationDate) {
+
+	public void setDonationDate(LocalDate donationDate) {
 		this.donationDate = donationDate;
 	}
+
+	public DonationItem getItem() {
+		return item;
+	}
+
+	public void setItem(DonationItem item) {
+		this.item = item;
+	}
+
+	public Donor getDonor() {
+		return donor;
+	}
+
+	public void setDonor(Donor donor) {
+		this.donor = donor;
+	}
+
+	//ToString
 	
+	@Override
+	public String toString() {
+		return "Donation [donationId=" + donationId + ", donationAmount=" + donationAmount + ", donationDate="
+				+ donationDate + ", item=" + item + ", donor=" + donor + "]";
+	}
+
 	
 }
